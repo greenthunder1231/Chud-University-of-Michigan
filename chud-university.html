@@ -10,11 +10,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:wght@400;500&display=swap');
 
         /*
-          Visual direction: real Ivy-League institutional, played dead straight.
-          The comedy is entirely in the copy — the design commits to looking like
-          a 200-year-old endowed university so the gap does the work.
-          Palette: oxblood + muted gold on aged paper. No teal, no pill buttons,
-          no glassmorphism — those were the AI-template tells in the original.
+          Direction: real Ivy-League institutional, played dead straight.
+          Comedy lives in the copy; the design commits to looking 200 years old.
+          Motion philosophy: one shared easing curve, orchestrated load sequence,
+          everything animates via opacity/transform (compositor-only) so nothing
+          janks. No display:none snapping — modals & menu animate in and out.
         */
         :root {
             --oxblood: #5C1A1B;
@@ -25,7 +25,14 @@
             --paper-deep: #ECE5D6;
             --ink: #211C18;
             --ink-soft: #4A423A;
+            /* one easing system for the whole page */
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        * { -webkit-tap-highlight-color: transparent; }
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Spectral', Georgia, serif;
@@ -33,118 +40,107 @@
             background-color: var(--paper);
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
 
-        .display {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
+        .display { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: -0.01em; }
+        .smallcaps { font-variant: small-caps; letter-spacing: 0.14em; font-family: 'Crimson Pro', Georgia, serif; }
 
-        .smallcaps {
-            font-variant: small-caps;
-            letter-spacing: 0.14em;
-            font-family: 'Crimson Pro', Georgia, serif;
-        }
-
-        /* Faint paper grain so flat fills don't read as a web template */
+        /* Faint paper grain */
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.04;
+            content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
+        /* ===== NAV ===== */
         .university-nav {
-            background: var(--paper);
-            border-bottom: 1px solid rgba(92,26,27,0.22);
+            background: rgba(245,241,232,0.82);
+            backdrop-filter: blur(10px) saturate(1.1);
+            -webkit-backdrop-filter: blur(10px) saturate(1.1);
+            border-bottom: 1px solid rgba(92,26,27,0);
+            transition: border-color 0.5s var(--ease-soft), background 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft);
+            /* load: drop down */
+            transform: translateY(-100%);
+            opacity: 0;
+            animation: navDrop 0.8s var(--ease) 0.1s forwards;
         }
+        .university-nav.scrolled {
+            border-bottom-color: rgba(92,26,27,0.22);
+            box-shadow: 0 6px 24px -16px rgba(66,17,18,0.5);
+        }
+        @keyframes navDrop { to { transform: translateY(0); opacity: 1; } }
 
         .nav-link {
-            color: var(--ink-soft);
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-size: 0.95rem;
-            letter-spacing: 0.02em;
-            transition: color 0.15s ease;
-            position: relative;
+            color: var(--ink-soft); font-family: 'Crimson Pro', Georgia, serif; font-size: 0.95rem;
+            letter-spacing: 0.02em; transition: color 0.25s var(--ease-soft); position: relative;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -6px; left: 0; width: 100%; height: 1.5px;
+            background: var(--oxblood); transform: scaleX(0); transform-origin: left;
+            transition: transform 0.35s var(--ease);
         }
         .nav-link:hover { color: var(--oxblood); }
-
-        .nav-active::after {
-            content: '';
-            position: absolute;
-            bottom: -6px; left: 0;
-            width: 100%; height: 1.5px;
-            background: var(--oxblood);
-        }
+        .nav-link:hover::after, .nav-link.nav-active::after { transform: scaleX(1); }
 
         .section-header {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 2.9rem;
-            line-height: 1.04;
-            font-weight: 600;
-            color: var(--oxblood-deep);
-            letter-spacing: -0.012em;
+            font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2.9rem; line-height: 1.04;
+            font-weight: 600; color: var(--oxblood-deep); letter-spacing: -0.012em;
         }
-
         .eyebrow {
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-variant: small-caps;
-            letter-spacing: 0.22em;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--gold);
+            font-family: 'Crimson Pro', Georgia, serif; font-variant: small-caps; letter-spacing: 0.22em;
+            font-size: 0.8rem; font-weight: 500; color: var(--gold);
         }
 
-        /* Buttons: squared, engraved, no pills, no glow */
-        .btn-primary {
-            background: var(--oxblood);
-            color: var(--paper);
-            font-family: 'Crimson Pro', Georgia, serif;
-            letter-spacing: 0.04em;
-            border: 1px solid var(--oxblood-deep);
-            transition: background 0.2s ease, transform 0.2s ease;
+        /* ===== BUTTONS ===== */
+        .btn-primary, .btn-outline, .btn-gold {
+            font-family: 'Crimson Pro', Georgia, serif; position: relative; overflow: hidden;
+            transition: transform 0.3s var(--ease), background 0.3s var(--ease-soft),
+                        border-color 0.3s var(--ease-soft), box-shadow 0.3s var(--ease);
+            will-change: transform;
         }
-        .btn-primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+        .btn-primary { background: var(--oxblood); color: var(--paper); letter-spacing: 0.04em; border: 1px solid var(--oxblood-deep); }
+        .btn-primary:hover { background: var(--oxblood-deep); transform: translateY(-2px); box-shadow: 0 12px 28px -14px rgba(66,17,18,0.7); }
+        .btn-primary:active { transform: translateY(0) scale(0.985); }
 
-        .btn-outline {
-            background: transparent;
-            color: var(--ink);
-            font-family: 'Crimson Pro', Georgia, serif;
-            letter-spacing: 0.04em;
-            border: 1px solid rgba(33,28,24,0.35);
-            transition: border-color 0.2s ease, background 0.2s ease;
+        .btn-outline { background: transparent; color: var(--ink); letter-spacing: 0.04em; border: 1px solid rgba(33,28,24,0.35); }
+        .btn-outline:hover { border-color: var(--oxblood); background: rgba(92,26,27,0.04); transform: translateY(-2px); }
+        .btn-outline:active { transform: translateY(0) scale(0.985); }
+
+        .btn-gold { background: transparent; color: var(--gold-light); letter-spacing: 0.05em; border: 1px solid rgba(196,168,107,0.55); }
+        .btn-gold:hover { background: rgba(196,168,107,0.12); border-color: var(--gold-light); transform: translateY(-2px); }
+        .btn-gold:active { transform: translateY(0) scale(0.985); }
+
+        /* sheen sweep on hover */
+        .btn-primary::before, .btn-gold::before {
+            content: ''; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+            background: linear-gradient(100deg, transparent, rgba(255,255,255,0.18), transparent);
+            transform: skewX(-18deg); transition: left 0.6s var(--ease); pointer-events: none;
         }
-        .btn-outline:hover { border-color: var(--oxblood); background: rgba(92,26,27,0.04); }
+        .btn-primary:hover::before, .btn-gold:hover::before { left: 140%; }
 
-        .btn-gold {
-            background: transparent;
-            color: var(--gold-light);
-            font-family: 'Crimson Pro', Georgia, serif;
-            letter-spacing: 0.05em;
-            border: 1px solid rgba(196,168,107,0.55);
-            transition: background 0.2s ease, border-color 0.2s ease;
-        }
-        .btn-gold:hover { background: rgba(196,168,107,0.1); border-color: var(--gold-light); }
-
+        /* ===== CARDS ===== */
         .academic-card {
-            background: var(--paper);
-            border: 1px solid rgba(92,26,27,0.18);
-            transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+            background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;
+            transition: border-color 0.4s var(--ease-soft), box-shadow 0.4s var(--ease), transform 0.4s var(--ease);
+            will-change: transform;
         }
         .academic-card:hover {
             border-color: rgba(92,26,27,0.45);
-            box-shadow: 0 18px 40px -20px rgba(66,17,18,0.4);
-            transform: translateY(-4px);
+            box-shadow: 0 22px 48px -24px rgba(66,17,18,0.45);
+            transform: translateY(-6px);
         }
+        .academic-card .card-icon { transition: transform 0.4s var(--ease); }
+        .academic-card:hover .card-icon { transform: translateY(-2px) scale(1.06); }
 
-        .crest-rule {
-            border: 1px solid var(--gold);
-            border-radius: 2px;
+        .campus-card {
+            background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px; overflow: hidden;
+            transition: border-color 0.4s var(--ease-soft), box-shadow 0.4s var(--ease), transform 0.4s var(--ease);
         }
+        .campus-card:hover { border-color: rgba(92,26,27,0.4); box-shadow: 0 22px 48px -24px rgba(66,17,18,0.4); transform: translateY(-5px); }
+        .campus-img { transition: transform 0.9s var(--ease); will-change: transform; }
+        .campus-card:hover .campus-img { transform: scale(1.05); }
+
+        .crest-rule { border: 1px solid var(--gold); border-radius: 2px; }
 
         .hero-overlay {
             background:
@@ -153,89 +149,109 @@
         }
 
         .stat-number {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-variant-numeric: tabular-nums;
-            font-feature-settings: "tnum";
-            font-weight: 600;
-            color: var(--oxblood);
+            font-family: 'Cormorant Garamond', Georgia, serif; font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum"; font-weight: 600; color: var(--oxblood);
         }
 
-        .pull-quote {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-style: italic;
-            font-weight: 500;
-        }
-        .pull-quote::before {
-            content: '\201C';
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 5.5rem;
-            line-height: 0.1;
-            color: var(--gold);
-            opacity: 0.4;
-            position: absolute;
-            top: 2.6rem; left: 1.6rem;
+        .pull-quote { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 500; }
+        .pull-quote.with-mark::before {
+            content: '\201C'; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 5.5rem;
+            line-height: 0.1; color: var(--gold); opacity: 0.4; position: absolute; top: 2.6rem; left: 1.6rem;
         }
 
         .program-badge {
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-variant: small-caps;
-            letter-spacing: 0.08em;
-            color: var(--oxblood);
-            border: 1px solid rgba(92,26,27,0.3);
-            font-size: 0.72rem;
-            padding: 0.1rem 0.65rem;
-            border-radius: 2px;
+            font-family: 'Crimson Pro', Georgia, serif; font-variant: small-caps; letter-spacing: 0.08em;
+            color: var(--oxblood); border: 1px solid rgba(92,26,27,0.3); font-size: 0.72rem;
+            padding: 0.1rem 0.65rem; border-radius: 2px;
         }
 
-        .reveal { opacity: 0; transform: translateY(28px); transition: all 0.7s cubic-bezier(0.4,0,0.2,1); }
+        /* ===== SCROLL REVEALS ===== */
+        .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.85s var(--ease), transform 0.85s var(--ease); will-change: opacity, transform; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: 90ms; }
-        .reveal-delay-2 { transition-delay: 180ms; }
-        .reveal-delay-3 { transition-delay: 270ms; }
+        .reveal-fade { opacity: 0; transition: opacity 0.9s var(--ease-soft); }
+        .reveal-fade.visible { opacity: 1; }
+        /* staggered children: set --i on each, delay derives from it */
+        .stagger > * { transition-delay: calc(var(--i, 0) * 90ms); }
 
-        .rule-ornament {
-            display: flex; align-items: center; justify-content: center; gap: 0.9rem;
-            color: var(--gold);
-        }
-        .rule-ornament::before, .rule-ornament::after {
-            content: ''; height: 1px; width: 60px; background: var(--gold); opacity: 0.6;
-        }
+        /* clip reveal for headers — wipes up from baseline */
+        .clip-reveal { clip-path: inset(0 0 100% 0); opacity: 0; transition: clip-path 0.9s var(--ease), opacity 0.6s var(--ease-soft); }
+        .clip-reveal.visible { clip-path: inset(0 0 -10% 0); opacity: 1; }
 
-        .modal { animation: modalEnter 0.22s cubic-bezier(0.32,0.72,0,1); }
-        @keyframes modalEnter {
-            from { opacity: 0; transform: translateY(16px) scale(0.99); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        /* ===== HERO LOAD STAGGER ===== */
+        .hero-item { opacity: 0; transform: translateY(26px); }
+        .hero-loaded .hero-item { animation: heroRise 1s var(--ease) forwards; }
+        .hero-loaded .hero-item:nth-child(1) { animation-delay: 0.35s; }
+        .hero-loaded .hero-item:nth-child(2) { animation-delay: 0.48s; }
+        .hero-loaded .hero-item:nth-child(3) { animation-delay: 0.61s; }
+        .hero-loaded .hero-item:nth-child(4) { animation-delay: 0.74s; }
+        .hero-loaded .hero-item:nth-child(5) { animation-delay: 0.9s; }
+        @keyframes heroRise { to { opacity: 1; transform: translateY(0); } }
+
+        .hero-bg { transition: transform 0.1s linear; will-change: transform; }
+
+        .rule-ornament { display: flex; align-items: center; justify-content: center; gap: 0.9rem; color: var(--gold); }
+        .rule-ornament::before, .rule-ornament::after { content: ''; height: 1px; width: 60px; background: var(--gold); opacity: 0.6; }
+
+        /* ===== MODALS — animate in/out, no hidden snap ===== */
+        .modal-root {
+            position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+            padding: 1rem; opacity: 0; visibility: hidden; pointer-events: none;
+            background: rgba(33,17,18,0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+            transition: opacity 0.4s var(--ease-soft), visibility 0s linear 0.4s,
+                        background 0.4s var(--ease-soft), backdrop-filter 0.4s var(--ease-soft);
         }
+        .modal-root.open {
+            opacity: 1; visibility: visible; pointer-events: auto;
+            background: rgba(33,17,18,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            transition: opacity 0.4s var(--ease-soft), visibility 0s,
+                        background 0.4s var(--ease-soft), backdrop-filter 0.4s var(--ease-soft);
+        }
+        .modal-panel {
+            position: relative; background: var(--paper); border: 1px solid var(--gold); border-radius: 3px;
+            box-shadow: 0 40px 80px -28px rgba(33,17,18,0.7);
+            transform: translateY(24px) scale(0.97); opacity: 0;
+            transition: transform 0.5s var(--ease), opacity 0.4s var(--ease-soft);
+            max-height: 92vh; overflow-y: auto;
+        }
+        .modal-root.open .modal-panel { transform: translateY(0) scale(1); opacity: 1; }
 
         .field {
-            border: 1px solid rgba(33,28,24,0.28);
-            background: #FBF9F3;
-            border-radius: 2px;
-            font-family: 'Spectral', Georgia, serif;
-            transition: border-color 0.18s ease;
+            border: 1px solid rgba(33,28,24,0.28); background: #FBF9F3; border-radius: 2px;
+            font-family: 'Spectral', Georgia, serif; transition: border-color 0.25s var(--ease-soft), box-shadow 0.25s var(--ease-soft);
         }
-        .field:focus { outline: none; border-color: var(--oxblood); }
-        .field-label {
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-variant: small-caps;
-            letter-spacing: 0.1em;
-            color: var(--ink-soft);
+        .field:focus { outline: none; border-color: var(--oxblood); box-shadow: 0 0 0 3px rgba(92,26,27,0.08); }
+        .field-label { font-family: 'Crimson Pro', Georgia, serif; font-variant: small-caps; letter-spacing: 0.1em; color: var(--ink-soft); }
+
+        /* ===== MOBILE MENU — height + opacity slide ===== */
+        #mobile-menu {
+            overflow: hidden; max-height: 0; opacity: 0;
+            transition: max-height 0.45s var(--ease), opacity 0.35s var(--ease-soft);
+            background: var(--paper); border-bottom: 1px solid rgba(92,26,27,0);
         }
+        #mobile-menu.open { max-height: 420px; opacity: 1; border-bottom-color: rgba(92,26,27,0.2); }
+        #mobile-menu-icon { transition: transform 0.4s var(--ease); }
+        #mobile-menu-icon.spin { transform: rotate(90deg); }
 
         ::selection { background: rgba(92,26,27,0.18); }
 
+        /* honor reduced motion globally */
+        /* Reduced motion: SOFTEN, don't kill. Keep gentle fades, drop big travel + parallax.
+           Critically this no longer force-disables transitions, which was making
+           sandboxed renderers (that report reduce-motion as on) show a dead page. */
         @media (prefers-reduced-motion: reduce) {
-            .reveal { opacity: 1; transform: none; transition: none; }
-            * { animation: none !important; }
+            html { scroll-behavior: auto; }
+            .reveal, .reveal-fade { transform: none; }            /* fade only, no slide */
+            .clip-reveal { clip-path: none; }                      /* fade only, no wipe */
+            .hero-item { transform: none; }                        /* fade only */
+            .hero-bg { transform: none !important; }               /* no parallax drift */
         }
     </style>
 </head>
 <body class="relative">
     <!-- Navigation -->
-    <nav class="university-nav sticky top-0 z-50">
+    <nav id="nav" class="university-nav fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-8">
             <div class="flex items-center justify-between h-[88px]">
-                <!-- Crest + wordmark -->
                 <a href="#top" class="flex items-center gap-x-4">
                     <div class="w-11 h-12 flex items-center justify-center crest-rule" style="background: var(--oxblood);">
                         <i class="fa-solid fa-book-open text-[18px]" style="color: var(--gold-light);"></i>
@@ -245,21 +261,15 @@
                         <div class="smallcaps text-[10px] mt-1" style="color: var(--gold);">of Michigan · founded mdcccclxix</div>
                     </div>
                 </a>
-
                 <div class="hidden md:flex items-center gap-x-10">
                     <a href="#about" class="nav-link">About</a>
                     <a href="#academics" class="nav-link">Academics</a>
                     <a href="#campuses" class="nav-link">Campuses</a>
                     <a href="#admissions" class="nav-link">Admissions</a>
                 </div>
-
                 <div class="flex items-center gap-x-3">
-                    <button onclick="showApplicationModal()"
-                            class="hidden md:block btn-primary px-7 py-3 text-[13.5px] smallcaps">
-                        Apply
-                    </button>
-                    <button onclick="toggleMobileMenu()"
-                            class="md:hidden w-11 h-11 flex items-center justify-center" style="color: var(--ink-soft);">
+                    <button onclick="showApplicationModal()" class="hidden md:block btn-primary px-7 py-3 text-[13.5px] smallcaps">Apply</button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-11 h-11 flex items-center justify-center" style="color: var(--ink-soft);">
                         <i id="mobile-menu-icon" class="fa-solid fa-bars text-[20px]"></i>
                     </button>
                 </div>
@@ -268,76 +278,68 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-b" style="background: var(--paper); border-color: rgba(92,26,27,0.2);">
+    <div id="mobile-menu" class="md:hidden fixed top-[88px] left-0 right-0 z-40">
         <div class="max-w-7xl mx-auto px-8 py-5 flex flex-col">
-            <a href="#about" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">About</a>
-            <a href="#academics" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Academics</a>
-            <a href="#campuses" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Campuses</a>
-            <a href="#admissions" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Admissions</a>
-            <button onclick="showApplicationModal(); toggleMobileMenu()" class="mt-5 btn-primary w-full py-3.5 text-[13.5px] smallcaps">Apply</button>
+            <a href="#about" onclick="closeMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">About</a>
+            <a href="#academics" onclick="closeMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Academics</a>
+            <a href="#campuses" onclick="closeMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Campuses</a>
+            <a href="#admissions" onclick="closeMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Admissions</a>
+            <button onclick="showApplicationModal(); closeMobileMenu()" class="mt-5 btn-primary w-full py-3.5 text-[13.5px] smallcaps">Apply</button>
         </div>
     </div>
 
     <!-- Hero -->
     <header id="top" class="relative h-[640px] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/1015/2000/1200'); filter: saturate(0.7) sepia(0.15);"></div>
+        <div class="hero-bg absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/1015/2000/1200'); filter: saturate(0.7) sepia(0.15); top: -40px; bottom: -40px;"></div>
         <div class="hero-overlay absolute inset-0"></div>
-
-        <div class="relative z-10 max-w-4xl mx-auto px-8 text-center">
-            <div class="rule-ornament mb-7">
+        <div id="hero-content" class="relative z-10 max-w-4xl mx-auto px-8 text-center">
+            <div class="hero-item rule-ornament mb-7">
                 <span class="smallcaps text-[11px]" style="color: var(--gold-light);">Ranked I by the Gooning Association of America · MMXXV</span>
             </div>
-
-            <h1 class="display text-[64px] md:text-[88px] leading-[0.92]" style="color: var(--paper);">
-                Chud University<br>of Michigan
-            </h1>
-
-            <p class="pull-quote text-[24px] md:text-[28px] mt-6" style="color: rgba(245,241,232,0.92); position: static;">
-                Veritas · Solitudo · Perseverantia
-            </p>
-            <p class="text-[15px] mt-2 smallcaps" style="color: rgba(196,168,107,0.85);">
-                Excellence in Gooning, Psychology &amp; Digital Governance
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-                <button onclick="showApplicationModal()" class="btn-gold group px-9 py-4 text-[14px] smallcaps flex items-center gap-x-3">
-                    <span>Begin your application</span>
-                    <i class="fa-solid fa-feather-pointed transition-transform group-hover:translate-x-0.5"></i>
-                </button>
-                <button onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})"
-                        class="px-9 py-4 text-[14px] smallcaps" style="color: rgba(245,241,232,0.85); border: 1px solid rgba(245,241,232,0.4);">
-                    Learn more
-                </button>
+            <h1 class="hero-item display text-[64px] md:text-[88px] leading-[0.92]" style="color: var(--paper);">Chud University<br>of Michigan</h1>
+            <p class="hero-item pull-quote text-[24px] md:text-[28px] mt-6" style="color: rgba(245,241,232,0.92);">Veritas · Solitudo · Perseverantia</p>
+            <div class="hero-item">
+                <p class="text-[15px] mt-2 smallcaps" style="color: rgba(196,168,107,0.85);">Excellence in Gooning, Psychology &amp; Digital Governance</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                    <button onclick="showApplicationModal()" class="btn-gold group px-9 py-4 text-[14px] smallcaps flex items-center gap-x-3">
+                        <span>Begin your application</span>
+                        <i class="fa-solid fa-feather-pointed transition-transform duration-300 group-hover:translate-x-1"></i>
+                    </button>
+                    <button onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" class="px-9 py-4 text-[14px] smallcaps transition-all duration-300 hover:bg-white/5" style="color: rgba(245,241,232,0.85); border: 1px solid rgba(245,241,232,0.4);">Learn more</button>
+                </div>
             </div>
-
-            <div class="mt-14 flex items-center justify-center gap-x-8 smallcaps text-[12px]" style="color: rgba(245,241,232,0.6);">
+            <div class="hero-item mt-14 flex items-center justify-center gap-x-8 smallcaps text-[12px]" style="color: rgba(245,241,232,0.6);">
                 <span><i class="fa-solid fa-location-dot mr-2" style="color: rgba(196,168,107,0.7);"></i>Climax, Michigan</span>
                 <span style="opacity:0.4;">·</span>
                 <span><i class="fa-solid fa-location-dot mr-2" style="color: rgba(196,168,107,0.7);"></i>Oblong, Illinois</span>
             </div>
         </div>
+        <div id="scroll-cue" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10" style="opacity:0; animation: heroRise 1s var(--ease) 1.3s forwards;">
+            <i class="fa-solid fa-chevron-down text-[18px]" style="color: rgba(196,168,107,0.7); animation: bob 2.2s ease-in-out infinite 1.5s;"></i>
+        </div>
     </header>
+    <style>@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }</style>
 
     <!-- Stats -->
     <div id="stats-bar" class="border-b" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
         <div class="max-w-7xl mx-auto px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 text-center">
-                <div class="reveal">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 text-center stagger">
+                <div class="reveal" style="--i:0">
                     <div class="text-[54px] leading-none stat-number">I</div>
                     <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">National Ranking · Gooning</div>
                     <div class="text-[12px] mt-1" style="color: var(--gold);">G.A.A., 2025</div>
                 </div>
-                <div class="reveal reveal-delay-1">
+                <div class="reveal" style="--i:1">
                     <div class="text-[54px] leading-none stat-number">2,847</div>
                     <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Currently Enrolled</div>
                     <div class="text-[12px] mt-1" style="color: var(--gold);">Certified chuds, incels &amp; gooners</div>
                 </div>
-                <div class="reveal reveal-delay-2">
+                <div class="reveal" style="--i:2">
                     <div class="text-[54px] leading-none stat-number">94<span class="text-[34px]">%</span></div>
                     <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Goon Placement Rate</div>
                     <div class="text-[12px] mt-1" style="color: var(--gold);">Within six months of graduation</div>
                 </div>
-                <div class="reveal reveal-delay-3">
+                <div class="reveal" style="--i:3">
                     <div class="text-[54px] leading-none stat-number">68</div>
                     <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Discord Servers Moderated</div>
                     <div class="text-[12px] mt-1" style="color: var(--gold);">By current student body</div>
@@ -347,10 +349,10 @@
     </div>
 
     <!-- About -->
-    <section id="about" class="max-w-4xl mx-auto px-8 pt-24 pb-16 reveal">
-        <div class="eyebrow mb-4">Established 1969</div>
-        <h2 class="section-header mb-8">A distinguished institution dedicated to specialized scholarship.</h2>
-        <div class="text-[16.5px] leading-[1.75] space-y-5" style="color: var(--ink-soft);">
+    <section id="about" class="max-w-4xl mx-auto px-8 pt-24 pb-16">
+        <div class="eyebrow mb-4 reveal">Established 1969</div>
+        <h2 class="section-header mb-8 clip-reveal">A distinguished institution dedicated to specialized scholarship.</h2>
+        <div class="text-[16.5px] leading-[1.75] space-y-5 reveal" style="color: var(--ink-soft);">
             <p>Founded in the historic village of Climax, Michigan, Chud University of Michigan has established itself as the premier destination for rigorous training in gooning methodology, psychological inquiry into digital subcultures, and the nuanced art of community moderation.</p>
             <p>We maintain an intentionally selective admissions process. The University extends invitations exclusively to certified chuds, incels, gooners, and the finest basement-dwellers who demonstrate exceptional promise. Our community is built upon a shared commitment to intellectual honesty, digital fluency, and mastery in environments often misunderstood by conventional academia.</p>
         </div>
@@ -361,38 +363,33 @@
         <div class="max-w-7xl mx-auto px-8">
             <div class="flex items-end justify-between mb-12">
                 <div>
-                    <div class="eyebrow mb-3">Signature Programs</div>
-                    <h2 class="section-header">Academic Offerings</h2>
+                    <div class="eyebrow mb-3 reveal">Signature Programs</div>
+                    <h2 class="section-header clip-reveal">Academic Offerings</h2>
                 </div>
-                <a href="#" class="hidden md:inline-flex items-center smallcaps text-[13px] group" style="color: var(--oxblood);">
-                    Full course catalogue <i class="fa-solid fa-arrow-right ml-2 transition-transform group-hover:translate-x-0.5"></i>
-                </a>
+                <a href="#" class="hidden md:inline-flex items-center smallcaps text-[13px] group reveal" style="color: var(--oxblood);">Full course catalogue <i class="fa-solid fa-arrow-right ml-2 transition-transform duration-300 group-hover:translate-x-1"></i></a>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <div onclick="showProgramModal('gooning')" class="academic-card p-8 flex flex-col cursor-pointer reveal" style="border-radius: 3px;">
+            <div class="grid md:grid-cols-3 gap-6 stagger">
+                <div onclick="showProgramModal('gooning')" class="academic-card p-8 flex flex-col cursor-pointer reveal" style="--i:0">
                     <div class="flex items-center justify-between mb-6">
-                        <i class="fa-solid fa-infinity text-[30px]" style="color: var(--oxblood);"></i>
+                        <i class="card-icon fa-solid fa-infinity text-[30px]" style="color: var(--oxblood);"></i>
                         <span class="program-badge">B.G. · M.G.</span>
                     </div>
                     <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Gooning Studies</h3>
                     <p class="text-[15px] leading-relaxed flex-1" style="color: var(--ink-soft);">Our flagship discipline. Students engage in intensive, supervised practice and theoretical analysis of gooning methodology, endurance optimization, and philosophical frameworks.</p>
                     <div class="pt-5 mt-5 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">1,142 current majors</div>
                 </div>
-
-                <div onclick="showProgramModal('psychology')" class="academic-card p-8 flex flex-col cursor-pointer reveal reveal-delay-1" style="border-radius: 3px;">
+                <div onclick="showProgramModal('psychology')" class="academic-card p-8 flex flex-col cursor-pointer reveal" style="--i:1">
                     <div class="flex items-center justify-between mb-6">
-                        <i class="fa-solid fa-brain text-[30px]" style="color: var(--oxblood);"></i>
+                        <i class="card-icon fa-solid fa-brain text-[30px]" style="color: var(--oxblood);"></i>
                         <span class="program-badge">B.A. · Ph.D.</span>
                     </div>
                     <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Psychology</h3>
                     <p class="text-[15px] leading-relaxed flex-1" style="color: var(--ink-soft);">A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.</p>
                     <div class="pt-5 mt-5 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">687 current majors</div>
                 </div>
-
-                <div onclick="showProgramModal('discord')" class="academic-card p-8 flex flex-col cursor-pointer reveal reveal-delay-2" style="border-radius: 3px;">
+                <div onclick="showProgramModal('discord')" class="academic-card p-8 flex flex-col cursor-pointer reveal" style="--i:2">
                     <div class="flex items-center justify-between mb-6">
-                        <i class="fa-solid fa-shield-halved text-[30px]" style="color: var(--oxblood);"></i>
+                        <i class="card-icon fa-solid fa-shield-halved text-[30px]" style="color: var(--oxblood);"></i>
                         <span class="program-badge">Certificate · B.S.</span>
                     </div>
                     <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Discord Moderation</h3>
@@ -404,11 +401,11 @@
     </section>
 
     <!-- Recognition -->
-    <section class="max-w-3xl mx-auto px-8 py-24 text-center reveal">
-        <div class="rule-ornament mb-6"><span class="smallcaps text-[12px]" style="color: var(--gold);">Institutional Distinction</span></div>
-        <h2 class="display text-[48px] leading-tight" style="color: var(--oxblood-deep);">Ranked First Hotspot for Gooning</h2>
-        <p class="pull-quote text-[20px] mt-4" style="color: var(--ink-soft); position: static;">Gooning Association of America — Annual Rankings, 2025</p>
-        <div class="mt-8 inline-flex items-center gap-x-3 px-6 py-3.5 text-[14px]" style="border: 1px solid var(--gold); border-radius: 2px;">
+    <section class="max-w-3xl mx-auto px-8 py-24 text-center">
+        <div class="rule-ornament mb-6 reveal"><span class="smallcaps text-[12px]" style="color: var(--gold);">Institutional Distinction</span></div>
+        <h2 class="display text-[48px] leading-tight clip-reveal" style="color: var(--oxblood-deep);">Ranked First Hotspot for Gooning</h2>
+        <p class="pull-quote text-[20px] mt-4 reveal" style="color: var(--ink-soft);">Gooning Association of America — Annual Rankings, 2025</p>
+        <div class="mt-8 inline-flex items-center gap-x-3 px-6 py-3.5 text-[14px] reveal" style="border: 1px solid var(--gold); border-radius: 2px;">
             <i class="fa-solid fa-award" style="color: var(--gold);"></i>
             <span style="color: var(--ink-soft);">Also recognized for excellence in basement scholarship and digital asceticism</span>
         </div>
@@ -418,26 +415,26 @@
     <section class="border-y py-20" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
         <div class="max-w-7xl mx-auto px-8">
             <div class="mb-12">
-                <div class="eyebrow mb-3">From Our Alumni</div>
-                <h2 class="section-header">Voices from the Community</h2>
+                <div class="eyebrow mb-3 reveal">From Our Alumni</div>
+                <h2 class="section-header clip-reveal">Voices from the Community</h2>
             </div>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="relative p-9 pt-12 reveal" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
-                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">Quite the hole in the wall. I keep coming back.</div>
+            <div class="grid md:grid-cols-3 gap-6 stagger">
+                <div class="relative p-9 pt-12 reveal" style="--i:0; background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote with-mark text-[19px] leading-snug relative z-10" style="color: var(--ink);">Quite the hole in the wall. I keep coming back.</div>
                     <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
                         <div class="display text-[19px]" style="color: var(--oxblood-deep);">Davi Ferreria</div>
                         <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 2019 · Gooning Studies</div>
                     </div>
                 </div>
-                <div class="relative p-9 pt-12 reveal reveal-delay-1" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
-                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">This place is amazing. If only I had a better view of the ocean from my dorm…</div>
+                <div class="relative p-9 pt-12 reveal" style="--i:1; background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote with-mark text-[19px] leading-snug relative z-10" style="color: var(--ink);">This place is amazing. If only I had a better view of the ocean from my dorm…</div>
                     <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
                         <div class="display text-[19px]" style="color: var(--oxblood-deep);">Effrey Jepstein</div>
                         <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 1997 · Psychology</div>
                     </div>
                 </div>
-                <div class="relative p-9 pt-12 reveal reveal-delay-2" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
-                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">Best place to find quality kittens on a budget. This is anonymous, right?</div>
+                <div class="relative p-9 pt-12 reveal" style="--i:2; background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote with-mark text-[19px] leading-snug relative z-10" style="color: var(--ink);">Best place to find quality kittens on a budget. This is anonymous, right?</div>
                     <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
                         <div class="display text-[19px]" style="color: var(--oxblood-deep);">M'Elon M. Usk</div>
                         <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 1976 · Discord Moderation</div>
@@ -450,13 +447,14 @@
     <!-- Campuses -->
     <section id="campuses" class="max-w-7xl mx-auto px-8 py-24">
         <div class="mb-12">
-            <div class="eyebrow mb-3">Locations</div>
-            <h2 class="section-header">Our Campuses</h2>
+            <div class="eyebrow mb-3 reveal">Locations</div>
+            <h2 class="section-header clip-reveal">Our Campuses</h2>
         </div>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="reveal" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px; overflow: hidden;">
-                <div class="h-[240px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/160/900/600'); filter: saturate(0.75) sepia(0.12);">
-                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px]" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Main Campus</div>
+        <div class="grid md:grid-cols-2 gap-8 stagger">
+            <div class="campus-card reveal" style="--i:0">
+                <div class="h-[240px] overflow-hidden relative">
+                    <div class="campus-img absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/160/900/600'); filter: saturate(0.75) sepia(0.12);"></div>
+                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px] z-10" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Main Campus</div>
                 </div>
                 <div class="p-9">
                     <h3 class="display text-[30px]" style="color: var(--oxblood-deep);">Climax, Michigan</h3>
@@ -464,9 +462,10 @@
                     <div class="mt-5 smallcaps text-[12px]" style="color: var(--gold);">1,892 students · 89 faculty residences</div>
                 </div>
             </div>
-            <div class="reveal reveal-delay-1" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px; overflow: hidden;">
-                <div class="h-[240px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/251/900/600'); filter: saturate(0.75) sepia(0.12);">
-                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px]" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Secondary Campus</div>
+            <div class="campus-card reveal" style="--i:1">
+                <div class="h-[240px] overflow-hidden relative">
+                    <div class="campus-img absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/251/900/600'); filter: saturate(0.75) sepia(0.12);"></div>
+                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px] z-10" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Secondary Campus</div>
                 </div>
                 <div class="p-9">
                     <h3 class="display text-[30px]" style="color: var(--oxblood-deep);">Oblong, Illinois</h3>
@@ -481,16 +480,15 @@
     <section id="admissions" class="py-24" style="background: var(--oxblood-deep); color: var(--paper);">
         <div class="max-w-5xl mx-auto px-8">
             <div class="max-w-3xl">
-                <div class="smallcaps text-[12px] mb-4" style="color: var(--gold-light);">Selective Admissions</div>
-                <h2 class="display text-[52px] leading-[1.02]" style="color: var(--paper);">Who Belongs at Chud University of Michigan</h2>
-                <div class="text-[16px] leading-[1.75] space-y-5 mt-7" style="color: rgba(245,241,232,0.85);">
+                <div class="smallcaps text-[12px] mb-4 reveal" style="color: var(--gold-light);">Selective Admissions</div>
+                <h2 class="display text-[52px] leading-[1.02] clip-reveal" style="color: var(--paper);">Who Belongs at Chud University of Michigan</h2>
+                <div class="text-[16px] leading-[1.75] space-y-5 mt-7 reveal" style="color: rgba(245,241,232,0.85);">
                     <p>Chud University of Michigan maintains one of the most focused admissions policies in higher education. We accept applications exclusively from certified chuds, incels, gooners, and the finest basement-dwellers.</p>
                     <p>Prospective students are expected to demonstrate meaningful engagement with the core disciplines through documented practice, community contributions, and a compelling personal statement.</p>
                 </div>
             </div>
-
-            <div class="mt-12 grid md:grid-cols-2 gap-6">
-                <div class="reveal p-9" style="border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
+            <div class="mt-12 grid md:grid-cols-2 gap-6 stagger">
+                <div class="reveal p-9" style="--i:0; border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
                     <div class="smallcaps text-[14px] mb-5" style="color: var(--gold-light);">Application Requirements</div>
                     <ol class="space-y-3 text-[14.5px]" style="color: rgba(245,241,232,0.88);">
                         <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">I.</span> Completed online application</li>
@@ -500,7 +498,7 @@
                         <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">V.</span> Personal statement (minimum 420 words)</li>
                     </ol>
                 </div>
-                <div class="reveal reveal-delay-1 p-9 flex flex-col" style="border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
+                <div class="reveal p-9 flex flex-col" style="--i:1; border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
                     <div class="smallcaps text-[14px] mb-5" style="color: var(--gold-light);">Application Cycle</div>
                     <div class="text-[14.5px] space-y-2" style="color: rgba(245,241,232,0.88);">
                         <div><span class="smallcaps" style="color: var(--gold-light);">Early Action ·</span> November 1</div>
@@ -508,9 +506,7 @@
                         <div class="pt-1 text-[12px]" style="color: rgba(245,241,232,0.5);">Decisions released on a rolling basis</div>
                     </div>
                     <div class="mt-auto pt-8">
-                        <button onclick="showApplicationModal()" class="btn-gold w-full py-4 text-[14px] smallcaps flex items-center justify-center gap-x-3">
-                            Start application <i class="fa-solid fa-feather-pointed"></i>
-                        </button>
+                        <button onclick="showApplicationModal()" class="btn-gold w-full py-4 text-[14px] smallcaps flex items-center justify-center gap-x-3">Start application <i class="fa-solid fa-feather-pointed"></i></button>
                         <p class="text-center text-[11px] mt-4 smallcaps" style="color: rgba(245,241,232,0.5);">Reviewed by the Board of Certified Chuds</p>
                     </div>
                 </div>
@@ -528,26 +524,22 @@
                     <div class="smallcaps text-[12px] mt-1" style="color: var(--gold);">Veritas · Solitudo · Perseverantia</div>
                     <div class="text-[13px] mt-3" style="color: var(--ink-soft);">© 1969–2026. All rights reserved. · Climax, Michigan</div>
                 </div>
-                <div class="text-[13px] md:text-right leading-relaxed" style="color: var(--ink-soft);">
-                    Main Campus · 69 Chud Boulevard<br>
-                    Climax, Michigan 49034<br>
-                    Secondary Campus · Oblong, Illinois
-                </div>
+                <div class="text-[13px] md:text-right leading-relaxed" style="color: var(--ink-soft);">Main Campus · 69 Chud Boulevard<br>Climax, Michigan 49034<br>Secondary Campus · Oblong, Illinois</div>
             </div>
         </div>
     </footer>
 
     <!-- Application Modal -->
-    <div id="application-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4" style="background: rgba(33,17,18,0.75);">
-        <div onclick="event.target.id === 'application-modal' && hideApplicationModal()" class="absolute inset-0"></div>
-        <div class="relative w-full max-w-lg modal" style="background: var(--paper); border: 1px solid var(--gold); border-radius: 3px; box-shadow: 0 30px 60px -20px rgba(33,17,18,0.6);">
+    <div id="application-modal" class="modal-root">
+        <div onclick="event.target === this && hideApplicationModal()" class="absolute inset-0"></div>
+        <div class="modal-panel w-full max-w-lg">
             <div class="px-9 pt-9 pb-6 border-b" style="border-color: rgba(92,26,27,0.18);">
                 <div class="flex items-start justify-between">
                     <div>
                         <div class="display text-[28px]" style="color: var(--oxblood-deep);">Application for Admission</div>
                         <div class="smallcaps text-[12px] mt-1" style="color: var(--gold);">Chud University of Michigan · Class of 2030</div>
                     </div>
-                    <button onclick="hideApplicationModal()" class="text-[32px] leading-none mt-[-4px]" style="color: var(--ink-soft);">×</button>
+                    <button onclick="hideApplicationModal()" class="text-[32px] leading-none mt-[-4px] transition-transform duration-300 hover:rotate-90" style="color: var(--ink-soft);">×</button>
                 </div>
             </div>
             <form id="application-form" onsubmit="submitApplication(event)" class="p-9 space-y-5">
@@ -564,19 +556,14 @@
                         <label class="field-label block text-[12px] mb-1.5">Intended Program</label>
                         <select name="intended_program" required class="field w-full px-4 py-3 text-[15px]">
                             <option value="">Select program</option>
-                            <option>Gooning Studies</option>
-                            <option>Psychology</option>
-                            <option>Discord Moderation</option>
+                            <option>Gooning Studies</option><option>Psychology</option><option>Discord Moderation</option>
                         </select>
                     </div>
                     <div>
                         <label class="field-label block text-[12px] mb-1.5">Certification Type</label>
                         <select name="certification_type" required class="field w-full px-4 py-3 text-[15px]">
                             <option value="">Select certification</option>
-                            <option>Certified Chud</option>
-                            <option>Incel</option>
-                            <option>Gooner</option>
-                            <option>Basement-Dweller (Elite)</option>
+                            <option>Certified Chud</option><option>Incel</option><option>Gooner</option><option>Basement-Dweller (Elite)</option>
                         </select>
                     </div>
                 </div>
@@ -594,157 +581,150 @@
     </div>
 
     <!-- Program Modal -->
-    <div id="program-modal" class="hidden fixed inset-0 z-[110] items-center justify-center p-4" style="background: rgba(33,17,18,0.75);">
-        <div onclick="event.target.id === 'program-modal' && hideProgramModal()" class="absolute inset-0"></div>
-        <div class="relative w-full max-w-2xl modal" style="background: var(--paper); border: 1px solid var(--gold); border-radius: 3px; box-shadow: 0 30px 60px -20px rgba(33,17,18,0.6);">
+    <div id="program-modal" class="modal-root" style="z-index:110;">
+        <div onclick="event.target === this && hideProgramModal()" class="absolute inset-0"></div>
+        <div class="modal-panel w-full max-w-2xl">
             <div class="px-9 pt-8 pb-6 border-b flex items-start justify-between" style="border-color: rgba(92,26,27,0.18);">
                 <div id="program-modal-header"></div>
-                <button onclick="hideProgramModal()" class="text-[32px] leading-none mt-[-4px]" style="color: var(--ink-soft);">×</button>
+                <button onclick="hideProgramModal()" class="text-[32px] leading-none mt-[-4px] transition-transform duration-300 hover:rotate-90" style="color: var(--ink-soft);">×</button>
             </div>
             <div class="p-9" id="program-modal-body"></div>
             <div class="px-9 py-6 border-t flex justify-end gap-3" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
                 <button onclick="hideProgramModal()" class="btn-outline px-6 py-2.5 text-[13px] smallcaps">Close</button>
-                <button onclick="hideProgramModal(); showApplicationModal()" class="btn-primary px-6 py-2.5 text-[13px] smallcaps">Apply to this program</button>
+                <button onclick="hideProgramModal(); setTimeout(showApplicationModal, 220)" class="btn-primary px-6 py-2.5 text-[13px] smallcaps">Apply to this program</button>
             </div>
         </div>
     </div>
 
     <script>
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* ===== Scroll reveals ===== */
         function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+            const els = document.querySelectorAll('.reveal, .reveal-fade, .clip-reveal');
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
                 });
-            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-            reveals.forEach(el => observer.observe(el));
+            }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+            els.forEach(el => obs.observe(el));
         }
 
-        function showApplicationModal() {
-            const m = document.getElementById('application-modal');
-            m.classList.remove('hidden'); m.classList.add('flex');
-            document.body.style.overflow = 'hidden';
+        /* ===== Nav: solidify after hero, scrollspy ===== */
+        function initNav() {
+            const nav = document.getElementById('nav');
+            const navLinks = document.querySelectorAll('#nav a[href^="#"]');
+            const sections = ['about','academics','campuses','admissions'].map(id => document.getElementById(id));
+            let ticking = false;
+            function onScroll() {
+                const y = window.scrollY;
+                nav.classList.toggle('scrolled', y > 40);
+                let current = '';
+                sections.forEach(s => { if (s && y >= s.offsetTop - 200) current = s.id; });
+                navLinks.forEach(l => l.classList.toggle('nav-active', l.getAttribute('href') === '#' + current));
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(onScroll); ticking = true; } }, { passive: true });
+            onScroll();
         }
-        function hideApplicationModal() {
-            const m = document.getElementById('application-modal');
-            m.classList.remove('flex'); m.classList.add('hidden');
-            document.body.style.overflow = '';
+
+        /* ===== Hero parallax (subtle, rAF-throttled) ===== */
+        function initParallax() {
+            if (reduceMotion) return;
+            const bg = document.querySelector('.hero-bg');
+            const content = document.getElementById('hero-content');
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (ticking) return;
+                requestAnimationFrame(() => {
+                    const y = window.scrollY;
+                    if (y < 720) {
+                        bg.style.transform = `translateY(${y * 0.28}px) scale(1.04)`;
+                        content.style.transform = `translateY(${y * 0.12}px)`;
+                        content.style.opacity = String(Math.max(0, 1 - y / 520));
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }, { passive: true });
         }
+
+        /* ===== Modals ===== */
+        function showApplicationModal() { document.getElementById('application-modal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function hideApplicationModal() { document.getElementById('application-modal').classList.remove('open'); document.body.style.overflow = ''; }
+        function hideProgramModal() { document.getElementById('program-modal').classList.remove('open'); document.body.style.overflow = ''; }
 
         function showProgramModal(program) {
             const m = document.getElementById('program-modal');
             const header = document.getElementById('program-modal-header');
             const body = document.getElementById('program-modal-body');
             const data = {
-                gooning: {
-                    title: 'Gooning Studies', degree: 'Bachelor of Gooning (B.G.) · Master of Gooning (M.G.)', icon: 'fa-infinity',
-                    desc: 'Our flagship program combines rigorous practical training with deep theoretical inquiry into the philosophy, physiology, and cultural significance of gooning.',
-                    details: [
-                        'Core curriculum includes endurance optimization, philosophical frameworks, community leadership, and archival research methodology.',
-                        'Students complete a capstone "Great Goon" project under faculty mentorship.',
-                        'Graduates consistently achieve top placement in leading online communities and research collectives.'
-                    ],
-                    stats: '1,142 current majors · 94% placement rate'
-                },
-                psychology: {
-                    title: 'Psychology', degree: 'Bachelor of Arts (B.A.) · Doctor of Philosophy (Ph.D.)', icon: 'fa-brain',
-                    desc: 'A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.',
-                    details: [
-                        'Focus areas include incel phenomenology, parasocial attachment theory, and digital identity construction.',
-                        'Students conduct original research using both qualitative and quantitative methods.',
-                        'Faculty includes leading researchers in online subculture psychology.'
-                    ],
-                    stats: '687 current majors · Strong research output'
-                },
-                discord: {
-                    title: 'Discord Moderation', degree: 'Certificate · Bachelor of Science (B.S.)', icon: 'fa-shield-halved',
-                    desc: 'Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces.',
-                    details: [
-                        'Hands-on labs in active server environments with real-time moderation scenarios.',
-                        'Curriculum covers conflict resolution, content policy development, and community health metrics.',
-                        'Graduates are actively recruited by the most demanding servers in the ecosystem.'
-                    ],
-                    stats: '1,018 current students · 68 servers currently moderated by alumni'
-                }
+                gooning: { title:'Gooning Studies', degree:'Bachelor of Gooning (B.G.) · Master of Gooning (M.G.)', icon:'fa-infinity',
+                    desc:'Our flagship program combines rigorous practical training with deep theoretical inquiry into the philosophy, physiology, and cultural significance of gooning.',
+                    details:['Core curriculum includes endurance optimization, philosophical frameworks, community leadership, and archival research methodology.','Students complete a capstone "Great Goon" project under faculty mentorship.','Graduates consistently achieve top placement in leading online communities and research collectives.'],
+                    stats:'1,142 current majors · 94% placement rate' },
+                psychology: { title:'Psychology', degree:'Bachelor of Arts (B.A.) · Doctor of Philosophy (Ph.D.)', icon:'fa-brain',
+                    desc:'A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.',
+                    details:['Focus areas include incel phenomenology, parasocial attachment theory, and digital identity construction.','Students conduct original research using both qualitative and quantitative methods.','Faculty includes leading researchers in online subculture psychology.'],
+                    stats:'687 current majors · Strong research output' },
+                discord: { title:'Discord Moderation', degree:'Certificate · Bachelor of Science (B.S.)', icon:'fa-shield-halved',
+                    desc:'Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces.',
+                    details:['Hands-on labs in active server environments with real-time moderation scenarios.','Curriculum covers conflict resolution, content policy development, and community health metrics.','Graduates are actively recruited by the most demanding servers in the ecosystem.'],
+                    stats:'1,018 current students · 68 servers currently moderated by alumni' }
             }[program];
-
-            header.innerHTML = `
-                <div class="flex items-center gap-x-4">
-                    <i class="fa-solid ${data.icon} text-[34px]" style="color: var(--oxblood);"></i>
-                    <div>
-                        <div class="display text-[30px]" style="color: var(--oxblood-deep);">${data.title}</div>
-                        <div class="smallcaps text-[12px] mt-0.5" style="color: var(--gold);">${data.degree}</div>
-                    </div>
-                </div>`;
-            body.innerHTML = `
-                <p class="text-[15.5px] leading-relaxed" style="color: var(--ink-soft);">${data.desc}</p>
-                <div class="mt-7">
-                    <div class="smallcaps text-[13px] mb-3" style="color: var(--oxblood);">Program Highlights</div>
-                    <ul class="space-y-2.5 text-[15px]" style="color: var(--ink-soft);">
-                        ${data.details.map(d => `<li class="flex gap-x-3"><span class="mt-2 block w-1.5 h-1.5 flex-shrink-0" style="background: var(--gold);"></span>${d}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="mt-8 pt-6 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">${data.stats}</div>`;
-            m.classList.remove('hidden'); m.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-        function hideProgramModal() {
-            const m = document.getElementById('program-modal');
-            m.classList.remove('flex'); m.classList.add('hidden');
-            document.body.style.overflow = '';
+            header.innerHTML = `<div class="flex items-center gap-x-4"><i class="fa-solid ${data.icon} text-[34px]" style="color: var(--oxblood);"></i><div><div class="display text-[30px]" style="color: var(--oxblood-deep);">${data.title}</div><div class="smallcaps text-[12px] mt-0.5" style="color: var(--gold);">${data.degree}</div></div></div>`;
+            body.innerHTML = `<p class="text-[15.5px] leading-relaxed" style="color: var(--ink-soft);">${data.desc}</p><div class="mt-7"><div class="smallcaps text-[13px] mb-3" style="color: var(--oxblood);">Program Highlights</div><ul class="space-y-2.5 text-[15px]" style="color: var(--ink-soft);">${data.details.map(d=>`<li class="flex gap-x-3"><span class="mt-2 block w-1.5 h-1.5 flex-shrink-0" style="background: var(--gold);"></span>${d}</li>`).join('')}</ul></div><div class="mt-8 pt-6 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">${data.stats}</div>`;
+            m.classList.add('open'); document.body.style.overflow = 'hidden';
         }
 
+        /* ===== Mobile menu ===== */
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('mobile-menu-icon');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden'); icon.classList.replace('fa-bars', 'fa-times');
-            } else {
-                menu.classList.add('hidden'); icon.classList.replace('fa-times', 'fa-bars');
-            }
+            const open = menu.classList.toggle('open');
+            icon.classList.toggle('spin', open);
+            icon.classList.toggle('fa-bars', !open);
+            icon.classList.toggle('fa-times', open);
+        }
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            menu.classList.remove('open');
+            icon.classList.remove('spin', 'fa-times'); icon.classList.add('fa-bars');
         }
 
+        /* ===== Form submit (webhook removed — no PII exfiltration) ===== */
         async function submitApplication(e) {
             e.preventDefault();
             const form = document.getElementById('application-form');
-            const modalContent = form.parentElement;
-
-            // NOTE: The original page POSTed name/email/personal-statement to a hardcoded
-            // Discord webhook — i.e. real PII off to a third party on every submit.
-            // Stubbed out so the joke form doesn't quietly exfiltrate anyone's info.
-            // If you want submissions delivered somewhere, wire up a real endpoint you control.
-            await new Promise(r => setTimeout(r, 500));
-
-            modalContent.innerHTML = `
-                <div class="p-12 text-center">
-                    <div class="mx-auto w-16 h-16 flex items-center justify-center mb-7" style="border: 1px solid var(--gold); border-radius: 50%;">
-                        <i class="fa-solid fa-check text-[26px]" style="color: var(--oxblood);"></i>
-                    </div>
-                    <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Application Received</h3>
-                    <p class="text-[15px] max-w-[30ch] mx-auto" style="color: var(--ink-soft);">Thank you. Your submission has been forwarded to the Board of Certified Chuds for review.</p>
-                    <div class="mt-7 text-[13.5px] leading-relaxed" style="color: var(--ink-soft);">
-                        You will receive a decision via email within 6–8 weeks.<br>
-                        In the meantime, consider reviewing our <span class="smallcaps" style="color: var(--gold);">Gooning 101</span> preparatory materials.
-                    </div>
-                    <button onclick="hideApplicationModal()" class="btn-outline mt-8 px-9 py-2.5 text-[13px] smallcaps">Return to Homepage</button>
-                </div>`;
+            const panel = form.parentElement;
+            const btn = form.querySelector('button[type=submit]');
+            btn.textContent = 'Submitting…'; btn.style.opacity = '0.7';
+            await new Promise(r => setTimeout(r, 600));
+            panel.style.transition = 'opacity 0.25s ease';
+            panel.style.opacity = '0';
+            await new Promise(r => setTimeout(r, 250));
+            panel.innerHTML = `<div class="p-12 text-center"><div class="mx-auto w-16 h-16 flex items-center justify-center mb-7" style="border:1px solid var(--gold); border-radius:50%;"><i class="fa-solid fa-check text-[26px]" style="color: var(--oxblood);"></i></div><h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Application Received</h3><p class="text-[15px] max-w-[30ch] mx-auto" style="color: var(--ink-soft);">Thank you. Your submission has been forwarded to the Board of Certified Chuds for review.</p><div class="mt-7 text-[13.5px] leading-relaxed" style="color: var(--ink-soft);">You will receive a decision via email within 6–8 weeks.<br>In the meantime, consider reviewing our <span class="smallcaps" style="color: var(--gold);">Gooning 101</span> preparatory materials.</div><button onclick="hideApplicationModal()" class="btn-outline mt-8 px-9 py-2.5 text-[13px] smallcaps">Return to Homepage</button></div>`;
+            requestAnimationFrame(() => { panel.style.opacity = '1'; });
         }
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (!document.getElementById('application-modal').classList.contains('hidden')) hideApplicationModal();
-                else if (!document.getElementById('program-modal').classList.contains('hidden')) hideProgramModal();
+                if (document.getElementById('application-modal').classList.contains('open')) hideApplicationModal();
+                else if (document.getElementById('program-modal').classList.contains('open')) hideProgramModal();
+                else if (document.getElementById('mobile-menu').classList.contains('open')) closeMobileMenu();
             }
         });
 
+        /* ===== Stat count-up ===== */
         function animateStats() {
+            if (reduceMotion) return;
             document.querySelectorAll('.stat-number').forEach(stat => {
                 const text = stat.textContent.trim();
                 const target = parseInt(text.replace(/[^0-9]/g, ''));
                 if (!target || text === 'I') return;
-                const hasPct = text.includes('%');
-                const hasComma = text.includes(',');
-                const start = performance.now(), duration = 1300;
+                const hasPct = text.includes('%'), hasComma = text.includes(',');
+                const start = performance.now(), duration = 1400;
                 function update(now) {
                     const p = Math.min((now - start) / duration, 1);
                     const eased = 1 - Math.pow(1 - p, 3);
@@ -753,35 +733,50 @@
                     else if (hasComma) stat.textContent = cur.toLocaleString();
                     else stat.textContent = cur;
                     if (p < 1) requestAnimationFrame(update);
-                    else stat.innerHTML = text === '94%' ? '94<span class="text-[34px]">%</span>' : text;
+                    else if (hasPct) stat.innerHTML = '94<span class="text-[34px]">%</span>';
+                    else stat.textContent = text;
                 }
                 requestAnimationFrame(update);
             });
         }
 
-        function init() {
-            initScrollReveal();
-            const statsSection = document.getElementById('stats-bar');
-            if (statsSection) {
-                const obs = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) { setTimeout(animateStats, 200); obs.disconnect(); }
-                    });
-                }, { threshold: 0.5 });
-                obs.observe(statsSection);
-            }
-            const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            const sections = ['about','academics','campuses','admissions'].map(id => document.getElementById(id));
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 180) current = s.id; });
-                navLinks.forEach(l => {
-                    l.classList.remove('nav-active');
-                    if (l.getAttribute('href') === `#${current}`) l.classList.add('nav-active');
-                });
-            });
+        // Fail-safe: if anything below throws, every reveal still becomes visible
+        // after a beat, so a single JS error can never leave a blank/dead page.
+        function revealAllFallback() {
+            document.querySelectorAll('.reveal, .reveal-fade, .clip-reveal').forEach(el => el.classList.add('visible'));
+            const hc = document.getElementById('hero-content');
+            if (hc) hc.classList.add('hero-loaded');
         }
-        init();
+
+        function init() {
+            try {
+                initScrollReveal();
+                initNav();
+                initParallax();
+                requestAnimationFrame(() => {
+                    const hc = document.getElementById('hero-content');
+                    if (hc) hc.classList.add('hero-loaded');
+                });
+                const bar = document.getElementById('stats-bar');
+                if (bar) {
+                    const obs = new IntersectionObserver((entries) => {
+                        entries.forEach(e => { if (e.isIntersecting) { setTimeout(animateStats, 220); obs.disconnect(); } });
+                    }, { threshold: 0.4 });
+                    obs.observe(bar);
+                }
+            } catch (err) {
+                console.error('init failed, revealing all content:', err);
+                revealAllFallback();
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+        // hard backstop: no matter what, nothing stays hidden past 2.5s
+        setTimeout(revealAllFallback, 2500);
     </script>
 </body>
 </html>
