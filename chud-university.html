@@ -3,1014 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chud University of Michigan • Official Homepage</title>
+    <title>Chud University of Michigan · Official Homepage</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:wght@400;500&display=swap');
+
+        /*
+          Visual direction: real Ivy-League institutional, played dead straight.
+          The comedy is entirely in the copy — the design commits to looking like
+          a 200-year-old endowed university so the gap does the work.
+          Palette: oxblood + muted gold on aged paper. No teal, no pill buttons,
+          no glassmorphism — those were the AI-template tells in the original.
+        */
         :root {
-            --navy: #0A0F1C;
-            --accent: #0F766E;
-            --accent-dark: #115E59;
-            --surface: #FAFAF9;
+            --oxblood: #5C1A1B;
+            --oxblood-deep: #421112;
+            --gold: #9A7B4F;
+            --gold-light: #C4A86B;
+            --paper: #F5F1E8;
+            --paper-deep: #ECE5D6;
+            --ink: #211C18;
+            --ink-soft: #4A423A;
         }
-        
+
         body {
-            font-family: 'Inter', system_ui, -apple-system, sans-serif;
+            font-family: 'Spectral', Georgia, serif;
+            color: var(--ink);
+            background-color: var(--paper);
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
         }
-        
-        .heading-serif {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            letter-spacing: -0.035em;
+
+        .display {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
-        
+
+        .smallcaps {
+            font-variant: small-caps;
+            letter-spacing: 0.14em;
+            font-family: 'Crimson Pro', Georgia, serif;
+        }
+
+        /* Faint paper grain so flat fills don't read as a web template */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
         .university-nav {
-            background: #ffffff;
-            border-bottom: 1px solid #E5E7EB;
-            box-shadow: 0 1px 0 0 rgba(10, 15, 28, 0.03);
+            background: var(--paper);
+            border-bottom: 1px solid rgba(92,26,27,0.22);
         }
-        
-        .section-header {
-            font-size: 2.35rem;
-            line-height: 2.55rem;
-            font-weight: 700;
-            color: #0A0F1C;
-            letter-spacing: -0.045em;
-        }
-        
-        .academic-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        border-color 0.2s ease;
-            border: 1px solid #E5E7EB;
-            background: white;
-        }
-        
-        .academic-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgb(10 15 28 / 0.12), 
-                        0 10px 10px -6px rgb(10 15 28 / 0.08);
-            border-color: #D1D5DB;
-        }
-        
+
         .nav-link {
-            color: #4B5563;
-            font-weight: 500;
+            color: var(--ink-soft);
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
             transition: color 0.15s ease;
             position: relative;
         }
-        
-        .nav-link:hover {
-            color: #0A0F1C;
-        }
-        
-        .hero-overlay {
-            background: linear-gradient(
-                to bottom, 
-                rgba(10, 15, 28, 0.68) 0%, 
-                rgba(10, 15, 28, 0.78) 50%, 
-                rgba(10, 15, 28, 0.88) 100%
-            );
-        }
-        
-        .stat-number {
-            font-variant-numeric: tabular-nums;
-            font-feature-settings: "tnum";
-        }
-        
-        .testimonial {
-            position: relative;
-        }
-        
-        .testimonial::before {
-            content: '“';
-            font-family: 'Playfair Display', Georgia, serif;
-            font-size: 8rem;
-            line-height: 0.7;
-            color: #E5E7EB;
-            position: absolute;
-            top: -2.1rem;
-            left: 1.6rem;
-            z-index: 0;
-            font-weight: 700;
-            opacity: 0.9;
-        }
-        
-        .formal-button {
-            background-color: #0A0F1C;
-            color: white;
-            font-weight: 600;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 2px 0 rgb(10 15 28 / 0.08);
-        }
-        
-        .formal-button:hover {
-            background-color: #1F2937;
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgb(10 15 28 / 0.15);
-        }
-        
-        .accent-button {
-            background-color: #0F766E;
-            color: white;
-            font-weight: 600;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgb(15 118 110 / 0.25);
-        }
-        
-        .accent-button:hover {
-            background-color: #115E59;
-            transform: translateY(-1.5px);
-            box-shadow: 0 20px 25px -5px rgb(15 118 110 / 0.3);
-        }
-        
-        .campus-card {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgb(10 15 28 / 0.08), 
-                        0 4px 6px -4px rgb(10 15 28 / 0.08);
-        }
-        
-        .campus-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 25px 50px -12px rgb(10 15 28 / 0.15);
-        }
-        
-        .program-badge {
-            background-color: #CCFBF1;
-            color: #0F766E;
-            font-size: 0.6875rem;
-            padding: 0.1rem 0.7rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-        
-        .premium-shadow {
-            box-shadow: 0 10px 15px -3px rgb(10 15 28 / 0.08), 
-                        0 4px 6px -4px rgb(10 15 28 / 0.08);
-        }
-        
-        /* Scroll reveal animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .reveal-delay-1 { transition-delay: 80ms; }
-        .reveal-delay-2 { transition-delay: 160ms; }
-        .reveal-delay-3 { transition-delay: 240ms; }
-        
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #E5E7EB, transparent);
-        }
-        
-        .nav-active:after {
+        .nav-link:hover { color: var(--oxblood); }
+
+        .nav-active::after {
             content: '';
             position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: #0F766E;
+            bottom: -6px; left: 0;
+            width: 100%; height: 1.5px;
+            background: var(--oxblood);
         }
-        
-        .interactive-card {
-            cursor: pointer;
+
+        .section-header {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 2.9rem;
+            line-height: 1.04;
+            font-weight: 600;
+            color: var(--oxblood-deep);
+            letter-spacing: -0.012em;
         }
-        
-        .interactive-card:active {
-            transform: scale(0.985);
+
+        .eyebrow {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-variant: small-caps;
+            letter-spacing: 0.22em;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gold);
         }
-        
-        .modal {
-            animation: modalEnter 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+
+        /* Buttons: squared, engraved, no pills, no glow */
+        .btn-primary {
+            background: var(--oxblood);
+            color: var(--paper);
+            font-family: 'Crimson Pro', Georgia, serif;
+            letter-spacing: 0.04em;
+            border: 1px solid var(--oxblood-deep);
+            transition: background 0.2s ease, transform 0.2s ease;
         }
-        
+        .btn-primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--ink);
+            font-family: 'Crimson Pro', Georgia, serif;
+            letter-spacing: 0.04em;
+            border: 1px solid rgba(33,28,24,0.35);
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .btn-outline:hover { border-color: var(--oxblood); background: rgba(92,26,27,0.04); }
+
+        .btn-gold {
+            background: transparent;
+            color: var(--gold-light);
+            font-family: 'Crimson Pro', Georgia, serif;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(196,168,107,0.55);
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .btn-gold:hover { background: rgba(196,168,107,0.1); border-color: var(--gold-light); }
+
+        .academic-card {
+            background: var(--paper);
+            border: 1px solid rgba(92,26,27,0.18);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .academic-card:hover {
+            border-color: rgba(92,26,27,0.45);
+            box-shadow: 0 18px 40px -20px rgba(66,17,18,0.4);
+            transform: translateY(-4px);
+        }
+
+        .crest-rule {
+            border: 1px solid var(--gold);
+            border-radius: 2px;
+        }
+
+        .hero-overlay {
+            background:
+                linear-gradient(to bottom, rgba(33,17,18,0.55), rgba(33,17,18,0.82)),
+                radial-gradient(ellipse at center, transparent 30%, rgba(33,17,18,0.5) 100%);
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+            font-weight: 600;
+            color: var(--oxblood);
+        }
+
+        .pull-quote {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+        }
+        .pull-quote::before {
+            content: '\201C';
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 5.5rem;
+            line-height: 0.1;
+            color: var(--gold);
+            opacity: 0.4;
+            position: absolute;
+            top: 2.6rem; left: 1.6rem;
+        }
+
+        .program-badge {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-variant: small-caps;
+            letter-spacing: 0.08em;
+            color: var(--oxblood);
+            border: 1px solid rgba(92,26,27,0.3);
+            font-size: 0.72rem;
+            padding: 0.1rem 0.65rem;
+            border-radius: 2px;
+        }
+
+        .reveal { opacity: 0; transform: translateY(28px); transition: all 0.7s cubic-bezier(0.4,0,0.2,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 90ms; }
+        .reveal-delay-2 { transition-delay: 180ms; }
+        .reveal-delay-3 { transition-delay: 270ms; }
+
+        .rule-ornament {
+            display: flex; align-items: center; justify-content: center; gap: 0.9rem;
+            color: var(--gold);
+        }
+        .rule-ornament::before, .rule-ornament::after {
+            content: ''; height: 1px; width: 60px; background: var(--gold); opacity: 0.6;
+        }
+
+        .modal { animation: modalEnter 0.22s cubic-bezier(0.32,0.72,0,1); }
         @keyframes modalEnter {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.985);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(16px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
-        .subtle-grid {
-            background-image: 
-                linear-gradient(rgba(10, 15, 28, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(10, 15, 28, 0.025) 1px, transparent 1px);
-            background-size: 28px 28px;
+
+        .field {
+            border: 1px solid rgba(33,28,24,0.28);
+            background: #FBF9F3;
+            border-radius: 2px;
+            font-family: 'Spectral', Georgia, serif;
+            transition: border-color 0.18s ease;
+        }
+        .field:focus { outline: none; border-color: var(--oxblood); }
+        .field-label {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-variant: small-caps;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+        }
+
+        ::selection { background: rgba(92,26,27,0.18); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            * { animation: none !important; }
         }
     </style>
 </head>
-<body class="bg-[#F8FAFC] text-slate-900">
+<body class="relative">
     <!-- Navigation -->
     <nav class="university-nav sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center gap-x-4">
-                    <div class="w-11 h-11 bg-[#0A0F1C] rounded-2xl flex items-center justify-center shadow-inner ring-1 ring-inset ring-white/10">
-                        <span class="text-white text-[22px] font-bold tracking-[-1.75px] font-serif">CUM</span>
+            <div class="flex items-center justify-between h-[88px]">
+                <!-- Crest + wordmark -->
+                <a href="#top" class="flex items-center gap-x-4">
+                    <div class="w-11 h-12 flex items-center justify-center crest-rule" style="background: var(--oxblood);">
+                        <i class="fa-solid fa-book-open text-[18px]" style="color: var(--gold-light);"></i>
                     </div>
-                    <div class="leading-none pt-0.5">
-                        <div class="font-bold text-[21px] md:text-[23px] tracking-[-1.3px] text-[#0A0F1C]">Chud University</div>
-                        <div class="text-[10px] text-slate-500 tracking-[2.2px] font-medium -mt-px">OF MICHIGAN • EST. 1969</div>
+                    <div class="leading-none">
+                        <div class="display text-[22px] md:text-[24px]" style="color: var(--oxblood-deep);">Chud University</div>
+                        <div class="smallcaps text-[10px] mt-1" style="color: var(--gold);">of Michigan · founded mdcccclxix</div>
                     </div>
+                </a>
+
+                <div class="hidden md:flex items-center gap-x-10">
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#academics" class="nav-link">Academics</a>
+                    <a href="#campuses" class="nav-link">Campuses</a>
+                    <a href="#admissions" class="nav-link">Admissions</a>
                 </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center gap-x-9 text-[14.5px] font-medium">
-                    <a href="#about" class="nav-link px-1">About</a>
-                    <a href="#academics" class="nav-link px-1">Academics</a>
-                    <a href="#campuses" class="nav-link px-1">Campuses</a>
-                    <a href="#admissions" class="nav-link px-1">Admissions</a>
-                </div>
-                
-                <!-- CTA -->
+
                 <div class="flex items-center gap-x-3">
                     <button onclick="showApplicationModal()"
-                            class="hidden md:block px-7 py-[13px] text-[13.5px] font-semibold formal-button rounded-2xl tracking-[-0.2px]">
-                        Apply Now
+                            class="hidden md:block btn-primary px-7 py-3 text-[13.5px] smallcaps">
+                        Apply
                     </button>
-                    
-                    <button onclick="toggleMobileMenu()" 
-                            class="md:hidden w-11 h-11 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-2xl transition-colors">
-                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-[21px]"></i>
+                    <button onclick="toggleMobileMenu()"
+                            class="md:hidden w-11 h-11 flex items-center justify-center" style="color: var(--ink-soft);">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-[20px]"></i>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
-    
+
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t bg-white">
-        <div class="max-w-7xl mx-auto px-8 py-6 flex flex-col gap-y-1 text-[15px] font-medium">
-            <a href="#about" onclick="toggleMobileMenu()" class="nav-link py-3 px-1 border-b border-slate-100">About</a>
-            <a href="#academics" onclick="toggleMobileMenu()" class="nav-link py-3 px-1 border-b border-slate-100">Academics</a>
-            <a href="#campuses" onclick="toggleMobileMenu()" class="nav-link py-3 px-1 border-b border-slate-100">Campuses</a>
-            <a href="#admissions" onclick="toggleMobileMenu()" class="nav-link py-3 px-1 border-b border-slate-100">Admissions</a>
-            
-            <button onclick="showApplicationModal(); toggleMobileMenu()"
-                    class="mt-5 w-full py-3.5 text-[14px] font-semibold formal-button rounded-2xl">
-                Apply Now
-            </button>
+    <div id="mobile-menu" class="hidden md:hidden border-b" style="background: var(--paper); border-color: rgba(92,26,27,0.2);">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex flex-col">
+            <a href="#about" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">About</a>
+            <a href="#academics" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Academics</a>
+            <a href="#campuses" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Campuses</a>
+            <a href="#admissions" onclick="toggleMobileMenu()" class="nav-link py-3 border-b" style="border-color: rgba(92,26,27,0.12);">Admissions</a>
+            <button onclick="showApplicationModal(); toggleMobileMenu()" class="mt-5 btn-primary w-full py-3.5 text-[13.5px] smallcaps">Apply</button>
         </div>
     </div>
-    
-    <!-- Hero Section -->
-    <header class="relative h-[660px] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center"
-             style="background-image: url('https://picsum.photos/id/1015/2000/1200')">
-        </div>
+
+    <!-- Hero -->
+    <header id="top" class="relative h-[640px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/1015/2000/1200'); filter: saturate(0.7) sepia(0.15);"></div>
         <div class="hero-overlay absolute inset-0"></div>
-        
-        <div class="relative z-10 max-w-5xl mx-auto px-8 text-center">
-            <div class="inline-flex items-center gap-x-2.5 bg-white/10 backdrop-blur-2xl px-5 py-1.5 rounded-3xl mb-8 border border-white/25 shadow-sm">
-                <div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span class="text-white text-[12.5px] font-semibold tracking-[1.5px]">RANKED #1 BY THE GOONING ASSOCIATION OF AMERICA • 2025</span>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-8 text-center">
+            <div class="rule-ornament mb-7">
+                <span class="smallcaps text-[11px]" style="color: var(--gold-light);">Ranked I by the Gooning Association of America · MMXXV</span>
             </div>
-            
-            <h1 class="text-white text-[70px] md:text-[86px] leading-[0.9] font-bold tracking-[-4.4px] heading-serif mb-5">Chud University<br>of Michigan</h1>
-            <p class="text-white/95 text-[26px] md:text-[29px] font-light tracking-[-0.65px] mb-10">Excellence in Gooning, Psychology &amp; Digital Governance</p>
-            
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <button onclick="showApplicationModal()"
-                        class="group px-9 py-[17px] text-[15.5px] font-semibold accent-button rounded-3xl flex items-center justify-center gap-x-3 shadow-2xl shadow-teal-950/40 active:scale-[0.985] transition-all">
-                    <span>Begin Your Application</span>
-                    <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-0.5"></i>
+
+            <h1 class="display text-[64px] md:text-[88px] leading-[0.92]" style="color: var(--paper);">
+                Chud University<br>of Michigan
+            </h1>
+
+            <p class="pull-quote text-[24px] md:text-[28px] mt-6" style="color: rgba(245,241,232,0.92); position: static;">
+                Veritas · Solitudo · Perseverantia
+            </p>
+            <p class="text-[15px] mt-2 smallcaps" style="color: rgba(196,168,107,0.85);">
+                Excellence in Gooning, Psychology &amp; Digital Governance
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                <button onclick="showApplicationModal()" class="btn-gold group px-9 py-4 text-[14px] smallcaps flex items-center gap-x-3">
+                    <span>Begin your application</span>
+                    <i class="fa-solid fa-feather-pointed transition-transform group-hover:translate-x-0.5"></i>
                 </button>
-                <button onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })"
-                        class="px-8 py-[17px] text-[15.5px] font-medium bg-white/10 hover:bg-white/15 active:bg-white/20 text-white border border-white/35 rounded-3xl backdrop-blur-xl transition-all active:scale-[0.985]">
-                    Learn More
+                <button onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})"
+                        class="px-9 py-4 text-[14px] smallcaps" style="color: rgba(245,241,232,0.85); border: 1px solid rgba(245,241,232,0.4);">
+                    Learn more
                 </button>
             </div>
-            
-            <div class="mt-14 flex items-center justify-center gap-x-9 text-white/70 text-[13.5px] font-medium tracking-wide">
-                <div class="flex items-center gap-x-2.5">
-                    <i class="fa-solid fa-map-marker-alt text-white/55"></i>
-                    <span>Climax, Michigan</span>
-                </div>
-                <div class="w-px h-3.5 bg-white/30"></div>
-                <div class="flex items-center gap-x-2.5">
-                    <i class="fa-solid fa-map-marker-alt text-white/55"></i>
-                    <span>Oblong, Illinois</span>
-                </div>
+
+            <div class="mt-14 flex items-center justify-center gap-x-8 smallcaps text-[12px]" style="color: rgba(245,241,232,0.6);">
+                <span><i class="fa-solid fa-location-dot mr-2" style="color: rgba(196,168,107,0.7);"></i>Climax, Michigan</span>
+                <span style="opacity:0.4;">·</span>
+                <span><i class="fa-solid fa-location-dot mr-2" style="color: rgba(196,168,107,0.7);"></i>Oblong, Illinois</span>
             </div>
         </div>
     </header>
-    
-    <!-- Quick Stats -->
-    <div class="border-b border-slate-200 bg-white">
-        <div class="max-w-7xl mx-auto px-8 py-9">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-9 text-center">
+
+    <!-- Stats -->
+    <div id="stats-bar" class="border-b" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
+        <div class="max-w-7xl mx-auto px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 text-center">
                 <div class="reveal">
-                    <div class="text-[44px] font-bold text-[#0A0F1C] tracking-[-1.8px] stat-number">1</div>
-                    <div class="text-[12.5px] text-slate-600 mt-1.5 tracking-[1.75px] font-semibold">NATIONAL RANKING IN GOONING</div>
-                    <div class="text-xs text-slate-400 mt-0.5">Gooning Association of America, 2025</div>
+                    <div class="text-[54px] leading-none stat-number">I</div>
+                    <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">National Ranking · Gooning</div>
+                    <div class="text-[12px] mt-1" style="color: var(--gold);">G.A.A., 2025</div>
                 </div>
                 <div class="reveal reveal-delay-1">
-                    <div class="text-[44px] font-bold text-[#0A0F1C] tracking-[-1.8px] stat-number">2,847</div>
-                    <div class="text-[12.5px] text-slate-600 mt-1.5 tracking-[1.75px] font-semibold">CURRENTLY ENROLLED</div>
-                    <div class="text-xs text-slate-400 mt-0.5">Certified chuds, incels &amp; gooners</div>
+                    <div class="text-[54px] leading-none stat-number">2,847</div>
+                    <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Currently Enrolled</div>
+                    <div class="text-[12px] mt-1" style="color: var(--gold);">Certified chuds, incels &amp; gooners</div>
                 </div>
                 <div class="reveal reveal-delay-2">
-                    <div class="text-[44px] font-bold text-[#0A0F1C] tracking-[-1.8px] stat-number">94</div>
-                    <div class="text-[12.5px] text-slate-600 mt-1.5 tracking-[1.75px] font-semibold">GOON PLACEMENT RATE</div>
-                    <div class="text-xs text-slate-400 mt-0.5">Within 6 months of graduation</div>
+                    <div class="text-[54px] leading-none stat-number">94<span class="text-[34px]">%</span></div>
+                    <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Goon Placement Rate</div>
+                    <div class="text-[12px] mt-1" style="color: var(--gold);">Within six months of graduation</div>
                 </div>
                 <div class="reveal reveal-delay-3">
-                    <div class="text-[44px] font-bold text-[#0A0F1C] tracking-[-1.8px] stat-number">68</div>
-                    <div class="text-[12.5px] text-slate-600 mt-1.5 tracking-[1.75px] font-semibold">DISCORD SERVERS MODERATED</div>
-                    <div class="text-xs text-slate-400 mt-0.5">By current student body</div>
+                    <div class="text-[54px] leading-none stat-number">68</div>
+                    <div class="smallcaps text-[12px] mt-3" style="color: var(--ink-soft);">Discord Servers Moderated</div>
+                    <div class="text-[12px] mt-1" style="color: var(--gold);">By current student body</div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- About Section -->
-    <section id="about" class="max-w-5xl mx-auto px-8 pt-20 pb-16 reveal">
-        <div class="max-w-[47rem]">
-            <div class="uppercase text-xs tracking-[3.75px] text-[#0F766E] font-bold mb-4">ESTABLISHED 1969</div>
-            <h2 class="section-header mb-7 leading-none">A distinguished institution<br>dedicated to specialized scholarship.</h2>
-            
-            <div class="prose prose-slate text-[15.3px] leading-relaxed text-slate-600">
-                <p>Founded in the historic village of Climax, Michigan, Chud University of Michigan has established itself as the premier destination for rigorous training in gooning methodology, psychological inquiry into digital subcultures, and the nuanced art of community moderation.</p>
-                
-                <p class="mt-5">We maintain an intentionally selective admissions process. The University extends invitations exclusively to certified chuds, incels, gooners, and the finest basement-dwellers who demonstrate exceptional promise. Our community is built upon a shared commitment to intellectual honesty, digital fluency, and mastery in environments often misunderstood by conventional academia.</p>
-            </div>
+
+    <!-- About -->
+    <section id="about" class="max-w-4xl mx-auto px-8 pt-24 pb-16 reveal">
+        <div class="eyebrow mb-4">Established 1969</div>
+        <h2 class="section-header mb-8">A distinguished institution dedicated to specialized scholarship.</h2>
+        <div class="text-[16.5px] leading-[1.75] space-y-5" style="color: var(--ink-soft);">
+            <p>Founded in the historic village of Climax, Michigan, Chud University of Michigan has established itself as the premier destination for rigorous training in gooning methodology, psychological inquiry into digital subcultures, and the nuanced art of community moderation.</p>
+            <p>We maintain an intentionally selective admissions process. The University extends invitations exclusively to certified chuds, incels, gooners, and the finest basement-dwellers who demonstrate exceptional promise. Our community is built upon a shared commitment to intellectual honesty, digital fluency, and mastery in environments often misunderstood by conventional academia.</p>
         </div>
     </section>
-    
-    <!-- Academic Programs -->
-    <section id="academics" class="bg-white border-y border-slate-200 py-16">
+
+    <!-- Academics -->
+    <section id="academics" class="border-y py-20" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
         <div class="max-w-7xl mx-auto px-8">
-            <div class="flex items-end justify-between mb-11">
+            <div class="flex items-end justify-between mb-12">
                 <div>
-                    <div class="uppercase text-xs tracking-[3.75px] text-[#0F766E] font-bold mb-2.5">SIGNATURE PROGRAMS</div>
+                    <div class="eyebrow mb-3">Signature Programs</div>
                     <h2 class="section-header">Academic Offerings</h2>
                 </div>
-                <a href="#" class="hidden md:flex items-center text-sm font-semibold text-[#0F766E] hover:text-[#115E59] transition-colors group">
-                    View full course catalog 
-                    <i class="fa-solid fa-arrow-right ml-2 transition-transform group-hover:translate-x-0.5"></i>
+                <a href="#" class="hidden md:inline-flex items-center smallcaps text-[13px] group" style="color: var(--oxblood);">
+                    Full course catalogue <i class="fa-solid fa-arrow-right ml-2 transition-transform group-hover:translate-x-0.5"></i>
                 </a>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Gooning Studies -->
-                <div onclick="showProgramModal('gooning')" 
-                     class="academic-card interactive-card rounded-3xl p-8 flex flex-col premium-shadow reveal">
-                    <div class="flex items-center justify-between mb-7">
-                        <div class="w-12 h-12 bg-[#CCFBF1] text-[#0F766E] rounded-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-infinity text-[26px]"></i>
-                        </div>
-                        <span class="program-badge">B.G. • M.G.</span>
+                <div onclick="showProgramModal('gooning')" class="academic-card p-8 flex flex-col cursor-pointer reveal" style="border-radius: 3px;">
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="fa-solid fa-infinity text-[30px]" style="color: var(--oxblood);"></i>
+                        <span class="program-badge">B.G. · M.G.</span>
                     </div>
-                    <h3 class="text-[26px] font-semibold tracking-[-0.6px] mb-3.5">Gooning Studies</h3>
-                    <p class="text-[14.8px] text-slate-600 flex-1 leading-relaxed">Our flagship discipline. Students engage in intensive, supervised practice and theoretical analysis of gooning methodology, endurance optimization, and philosophical frameworks.</p>
-                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2 font-medium">
-                        <i class="fa-solid fa-users text-[#0F766E]"></i>
-                        <span>1,142 current majors</span>
-                    </div>
+                    <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Gooning Studies</h3>
+                    <p class="text-[15px] leading-relaxed flex-1" style="color: var(--ink-soft);">Our flagship discipline. Students engage in intensive, supervised practice and theoretical analysis of gooning methodology, endurance optimization, and philosophical frameworks.</p>
+                    <div class="pt-5 mt-5 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">1,142 current majors</div>
                 </div>
-                
-                <!-- Psychology -->
-                <div onclick="showProgramModal('psychology')" 
-                     class="academic-card interactive-card rounded-3xl p-8 flex flex-col premium-shadow reveal reveal-delay-1">
-                    <div class="flex items-center justify-between mb-7">
-                        <div class="w-12 h-12 bg-[#E0E7FF] text-[#4338CA] rounded-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-brain text-[26px]"></i>
-                        </div>
-                        <span class="program-badge">B.A. • Ph.D.</span>
+
+                <div onclick="showProgramModal('psychology')" class="academic-card p-8 flex flex-col cursor-pointer reveal reveal-delay-1" style="border-radius: 3px;">
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="fa-solid fa-brain text-[30px]" style="color: var(--oxblood);"></i>
+                        <span class="program-badge">B.A. · Ph.D.</span>
                     </div>
-                    <h3 class="text-[26px] font-semibold tracking-[-0.6px] mb-3.5">Psychology</h3>
-                    <p class="text-[14.8px] text-slate-600 flex-1 leading-relaxed">A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.</p>
-                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2 font-medium">
-                        <i class="fa-solid fa-users text-[#4338CA]"></i>
-                        <span>687 current majors</span>
-                    </div>
+                    <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Psychology</h3>
+                    <p class="text-[15px] leading-relaxed flex-1" style="color: var(--ink-soft);">A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.</p>
+                    <div class="pt-5 mt-5 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">687 current majors</div>
                 </div>
-                
-                <!-- Discord Moderation -->
-                <div onclick="showProgramModal('discord')" 
-                     class="academic-card interactive-card rounded-3xl p-8 flex flex-col premium-shadow reveal reveal-delay-2">
-                    <div class="flex items-center justify-between mb-7">
-                        <div class="w-12 h-12 bg-[#CFFAFE] text-[#0E7490] rounded-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-shield-halved text-[26px]"></i>
-                        </div>
-                        <span class="program-badge">Certificate • B.S.</span>
+
+                <div onclick="showProgramModal('discord')" class="academic-card p-8 flex flex-col cursor-pointer reveal reveal-delay-2" style="border-radius: 3px;">
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="fa-solid fa-shield-halved text-[30px]" style="color: var(--oxblood);"></i>
+                        <span class="program-badge">Certificate · B.S.</span>
                     </div>
-                    <h3 class="text-[26px] font-semibold tracking-[-0.6px] mb-3.5">Discord Moderation</h3>
-                    <p class="text-[14.8px] text-slate-600 flex-1 leading-relaxed">Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces.</p>
-                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2 font-medium">
-                        <i class="fa-solid fa-users text-[#0E7490]"></i>
-                        <span>1,018 current students</span>
-                    </div>
+                    <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Discord Moderation</h3>
+                    <p class="text-[15px] leading-relaxed flex-1" style="color: var(--ink-soft);">Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces.</p>
+                    <div class="pt-5 mt-5 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">1,018 current students</div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Recognition -->
-    <section class="max-w-5xl mx-auto px-8 py-20 text-center reveal">
-        <div class="inline-block bg-[#0A0F1C] text-white px-6 py-1.5 rounded-3xl text-xs font-bold tracking-[2.2px] mb-5">INSTITUTIONAL DISTINCTION</div>
-        <h2 class="text-[44px] font-bold tracking-[-1.8px] mb-4 leading-none">Ranked #1 Hotspot for Gooning</h2>
-        <p class="text-2xl text-slate-600">Gooning Association of America — Annual Rankings, 2025</p>
-        
-        <div class="mt-9 inline-flex items-center gap-x-3 bg-white border border-slate-200 px-6 py-4 rounded-3xl text-sm">
-            <i class="fa-solid fa-trophy text-amber-500 text-lg"></i>
-            <span class="font-medium text-slate-700">Also recognized for excellence in basement scholarship and digital asceticism</span>
+    <section class="max-w-3xl mx-auto px-8 py-24 text-center reveal">
+        <div class="rule-ornament mb-6"><span class="smallcaps text-[12px]" style="color: var(--gold);">Institutional Distinction</span></div>
+        <h2 class="display text-[48px] leading-tight" style="color: var(--oxblood-deep);">Ranked First Hotspot for Gooning</h2>
+        <p class="pull-quote text-[20px] mt-4" style="color: var(--ink-soft); position: static;">Gooning Association of America — Annual Rankings, 2025</p>
+        <div class="mt-8 inline-flex items-center gap-x-3 px-6 py-3.5 text-[14px]" style="border: 1px solid var(--gold); border-radius: 2px;">
+            <i class="fa-solid fa-award" style="color: var(--gold);"></i>
+            <span style="color: var(--ink-soft);">Also recognized for excellence in basement scholarship and digital asceticism</span>
         </div>
     </section>
-    
+
     <!-- Testimonials -->
-    <section class="bg-white border-y border-slate-200 py-16">
+    <section class="border-y py-20" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
         <div class="max-w-7xl mx-auto px-8">
-            <div class="mb-11">
-                <div class="uppercase text-xs tracking-[3.75px] text-[#0F766E] font-bold mb-2.5">FROM OUR ALUMNI</div>
+            <div class="mb-12">
+                <div class="eyebrow mb-3">From Our Alumni</div>
                 <h2 class="section-header">Voices from the Community</h2>
             </div>
-            
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="testimonial bg-[#F8FAFC] border border-slate-200 rounded-3xl p-8 pt-10 reveal">
-                    <p class="text-[15.2px] text-slate-700 italic leading-relaxed relative z-10">"Quite the hole in the wall. I keep coming back."</p>
-                    <div class="mt-9 flex items-center gap-x-4">
-                        <div class="w-11 h-11 bg-slate-200 rounded-2xl flex-shrink-0 overflow-hidden ring-1 ring-inset ring-slate-300/60">
-                            <img src="https://picsum.photos/id/64/44/44" alt="Davi Ferreria" class="object-cover w-full h-full">
-                        </div>
-                        <div class="leading-tight">
-                            <div class="font-semibold tracking-[-0.2px]">Davi Ferreria</div>
-                            <div class="text-sm text-slate-500">Class of 2019 • Gooning Studies</div>
-                        </div>
+                <div class="relative p-9 pt-12 reveal" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">Quite the hole in the wall. I keep coming back.</div>
+                    <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
+                        <div class="display text-[19px]" style="color: var(--oxblood-deep);">Davi Ferreria</div>
+                        <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 2019 · Gooning Studies</div>
                     </div>
                 </div>
-                
-                <div class="testimonial bg-[#F8FAFC] border border-slate-200 rounded-3xl p-8 pt-10 reveal reveal-delay-1">
-                    <p class="text-[15.2px] text-slate-700 italic leading-relaxed relative z-10">"This place is amazing. If only I had a better view of the ocean from my dorm..."</p>
-                    <div class="mt-9 flex items-center gap-x-4">
-                        <div class="w-11 h-11 bg-slate-200 rounded-2xl flex-shrink-0 overflow-hidden ring-1 ring-inset ring-slate-300/60">
-                            <img src="https://picsum.photos/id/1005/44/44" alt="Effrey Jepstein" class="object-cover w-full h-full">
-                        </div>
-                        <div class="leading-tight">
-                            <div class="font-semibold tracking-[-0.2px]">Effrey Jepstein</div>
-                            <div class="text-sm text-slate-500">Class of 1997 • Psychology</div>
-                        </div>
+                <div class="relative p-9 pt-12 reveal reveal-delay-1" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">This place is amazing. If only I had a better view of the ocean from my dorm…</div>
+                    <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
+                        <div class="display text-[19px]" style="color: var(--oxblood-deep);">Effrey Jepstein</div>
+                        <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 1997 · Psychology</div>
                     </div>
                 </div>
-                
-                <div class="testimonial bg-[#F8FAFC] border border-slate-200 rounded-3xl p-8 pt-10 reveal reveal-delay-2">
-                    <p class="text-[15.2px] text-slate-700 italic leading-relaxed relative z-10">"Best place to find quality kittens on a budget. This is anonymous, right?"</p>
-                    <div class="mt-9 flex items-center gap-x-4">
-                        <div class="w-11 h-11 bg-slate-200 rounded-2xl flex-shrink-0 overflow-hidden ring-1 ring-inset ring-slate-300/60">
-                            <img src="https://picsum.photos/id/201/44/44" alt="M'Elon M. Usk" class="object-cover w-full h-full">
-                        </div>
-                        <div class="leading-tight">
-                            <div class="font-semibold tracking-[-0.2px]">M'Elon M. Usk</div>
-                            <div class="text-sm text-slate-500">Class of 1976 • Discord Moderation</div>
-                        </div>
+                <div class="relative p-9 pt-12 reveal reveal-delay-2" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px;">
+                    <div class="pull-quote text-[19px] leading-snug relative z-10" style="color: var(--ink);">Best place to find quality kittens on a budget. This is anonymous, right?</div>
+                    <div class="mt-7 pt-5 border-t" style="border-color: rgba(92,26,27,0.12);">
+                        <div class="display text-[19px]" style="color: var(--oxblood-deep);">M'Elon M. Usk</div>
+                        <div class="smallcaps text-[12px]" style="color: var(--gold);">Class of 1976 · Discord Moderation</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Campuses -->
-    <section id="campuses" class="max-w-7xl mx-auto px-8 py-20">
-        <div class="mb-11">
-            <div class="uppercase text-xs tracking-[3.75px] text-[#0F766E] font-bold mb-2.5">LOCATIONS</div>
+    <section id="campuses" class="max-w-7xl mx-auto px-8 py-24">
+        <div class="mb-12">
+            <div class="eyebrow mb-3">Locations</div>
             <h2 class="section-header">Our Campuses</h2>
         </div>
-        
         <div class="grid md:grid-cols-2 gap-8">
-            <!-- Main Campus -->
-            <div class="campus-card bg-white rounded-3xl overflow-hidden border border-slate-200 reveal">
-                <div class="h-[230px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/160/900/600')">
-                    <div class="absolute top-5 right-5 px-4 py-1 bg-white/90 backdrop-blur-md text-xs font-bold tracking-wider text-emerald-700 rounded-2xl">MAIN CAMPUS</div>
+            <div class="reveal" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px; overflow: hidden;">
+                <div class="h-[240px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/160/900/600'); filter: saturate(0.75) sepia(0.12);">
+                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px]" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Main Campus</div>
                 </div>
-                <div class="p-8">
-                    <h3 class="text-[29px] font-semibold tracking-[-0.8px]">Climax, Michigan</h3>
-                    <p class="mt-4 text-[14.8px] text-slate-600 leading-relaxed">Our historic flagship campus occupies a serene 340-acre site in southwestern Michigan. The grounds feature dedicated gooning pavilions, extensive basement archives, and the university’s renowned Center for Digital Asceticism.</p>
-                    
-                    <div class="mt-6 text-sm flex items-center gap-x-2 text-slate-500 font-medium">
-                        <i class="fa-solid fa-users text-emerald-600"></i>
-                        <span>1,892 students • 89 faculty residences</span>
-                    </div>
+                <div class="p-9">
+                    <h3 class="display text-[30px]" style="color: var(--oxblood-deep);">Climax, Michigan</h3>
+                    <p class="mt-4 text-[15px] leading-relaxed" style="color: var(--ink-soft);">Our historic flagship campus occupies a serene 340-acre site in southwestern Michigan. The grounds feature dedicated gooning pavilions, extensive basement archives, and the University's renowned Center for Digital Asceticism.</p>
+                    <div class="mt-5 smallcaps text-[12px]" style="color: var(--gold);">1,892 students · 89 faculty residences</div>
                 </div>
             </div>
-            
-            <!-- Secondary Campus -->
-            <div class="campus-card bg-white rounded-3xl overflow-hidden border border-slate-200 reveal reveal-delay-1">
-                <div class="h-[230px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/251/900/600')">
-                    <div class="absolute top-5 right-5 px-4 py-1 bg-white/90 backdrop-blur-md text-xs font-bold tracking-wider text-sky-700 rounded-2xl">SECONDARY CAMPUS</div>
+            <div class="reveal reveal-delay-1" style="background: var(--paper); border: 1px solid rgba(92,26,27,0.18); border-radius: 3px; overflow: hidden;">
+                <div class="h-[240px] bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/251/900/600'); filter: saturate(0.75) sepia(0.12);">
+                    <div class="absolute top-5 left-5 px-4 py-1 smallcaps text-[11px]" style="background: var(--oxblood); color: var(--gold-light); border-radius: 2px;">Secondary Campus</div>
                 </div>
-                <div class="p-8">
-                    <h3 class="text-[29px] font-semibold tracking-[-0.8px]">Oblong, Illinois</h3>
-                    <p class="mt-4 text-[14.8px] text-slate-600 leading-relaxed">Our innovative satellite campus in rural Illinois provides expanded facilities for advanced Discord moderation laboratories and large-scale gooning symposiums. The open landscape offers unique opportunities for off-grid digital practice.</p>
-                    
-                    <div class="mt-6 text-sm flex items-center gap-x-2 text-slate-500 font-medium">
-                        <i class="fa-solid fa-users text-sky-600"></i>
-                        <span>955 students • 41 faculty residences</span>
-                    </div>
+                <div class="p-9">
+                    <h3 class="display text-[30px]" style="color: var(--oxblood-deep);">Oblong, Illinois</h3>
+                    <p class="mt-4 text-[15px] leading-relaxed" style="color: var(--ink-soft);">Our satellite campus in rural Illinois provides expanded facilities for advanced Discord moderation laboratories and large-scale gooning symposia. The open landscape offers unique opportunities for off-grid digital practice.</p>
+                    <div class="mt-5 smallcaps text-[12px]" style="color: var(--gold);">955 students · 41 faculty residences</div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Admissions -->
-    <section id="admissions" class="bg-[#0A0F1C] text-white py-16">
+    <section id="admissions" class="py-24" style="background: var(--oxblood-deep); color: var(--paper);">
         <div class="max-w-5xl mx-auto px-8">
             <div class="max-w-3xl">
-                <div class="uppercase tracking-[3.75px] text-xs text-white/50 font-bold mb-4">SELECTIVE ADMISSIONS</div>
-                <h2 class="text-white text-[46px] font-bold tracking-[-1.6px] mb-7 leading-none">Who Belongs at<br>Chud University of Michigan</h2>
-                
-                <div class="text-[15.5px] text-white/90 leading-relaxed space-y-5 max-w-[42ch]">
+                <div class="smallcaps text-[12px] mb-4" style="color: var(--gold-light);">Selective Admissions</div>
+                <h2 class="display text-[52px] leading-[1.02]" style="color: var(--paper);">Who Belongs at Chud University of Michigan</h2>
+                <div class="text-[16px] leading-[1.75] space-y-5 mt-7" style="color: rgba(245,241,232,0.85);">
                     <p>Chud University of Michigan maintains one of the most focused admissions policies in higher education. We accept applications exclusively from certified chuds, incels, gooners, and the finest basement-dwellers.</p>
                     <p>Prospective students are expected to demonstrate meaningful engagement with the core disciplines through documented practice, community contributions, and a compelling personal statement.</p>
                 </div>
             </div>
-            
-            <div class="mt-12 grid md:grid-cols-2 gap-5">
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-8 reveal">
-                    <div class="font-semibold mb-5 flex items-center gap-x-3 text-lg">
-                        <i class="fa-solid fa-check-circle text-emerald-400"></i>
-                        <span>Application Requirements</span>
-                    </div>
-                    <ul class="space-y-3 text-[14.5px] text-white/85">
-                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-[3px] opacity-70 w-5">01</span> Completed online application</li>
-                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-[3px] opacity-70 w-5">02</span> Certification documentation</li>
-                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-[3px] opacity-70 w-5">03</span> Portfolio of relevant work (memes, server logs, manifestos)</li>
-                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-[3px] opacity-70 w-5">04</span> Two letters of recommendation from verified online peers</li>
-                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-[3px] opacity-70 w-5">05</span> Personal statement (minimum 420 words)</li>
-                    </ul>
+
+            <div class="mt-12 grid md:grid-cols-2 gap-6">
+                <div class="reveal p-9" style="border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
+                    <div class="smallcaps text-[14px] mb-5" style="color: var(--gold-light);">Application Requirements</div>
+                    <ol class="space-y-3 text-[14.5px]" style="color: rgba(245,241,232,0.88);">
+                        <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">I.</span> Completed online application</li>
+                        <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">II.</span> Certification documentation</li>
+                        <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">III.</span> Portfolio of relevant work (memes, server logs, manifestos)</li>
+                        <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">IV.</span> Two letters of recommendation from verified online peers</li>
+                        <li class="flex gap-x-4"><span class="display text-[15px]" style="color: var(--gold);">V.</span> Personal statement (minimum 420 words)</li>
+                    </ol>
                 </div>
-                
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col reveal reveal-delay-1">
-                    <div>
-                        <div class="font-semibold mb-5 text-lg">Application Cycle</div>
-                        <div class="text-[14.5px] text-white/85 space-y-1.5">
-                            <div><span class="font-medium">Early Action:</span> November 1</div>
-                            <div><span class="font-medium">Regular Decision:</span> January 15</div>
-                            <div class="pt-1 text-xs text-white/50">Decisions released on a rolling basis</div>
-                        </div>
+                <div class="reveal reveal-delay-1 p-9 flex flex-col" style="border: 1px solid rgba(196,168,107,0.3); border-radius: 3px;">
+                    <div class="smallcaps text-[14px] mb-5" style="color: var(--gold-light);">Application Cycle</div>
+                    <div class="text-[14.5px] space-y-2" style="color: rgba(245,241,232,0.88);">
+                        <div><span class="smallcaps" style="color: var(--gold-light);">Early Action ·</span> November 1</div>
+                        <div><span class="smallcaps" style="color: var(--gold-light);">Regular Decision ·</span> January 15</div>
+                        <div class="pt-1 text-[12px]" style="color: rgba(245,241,232,0.5);">Decisions released on a rolling basis</div>
                     </div>
-                    
-                    <div class="mt-auto pt-9">
-                        <button onclick="showApplicationModal()"
-                                class="w-full py-4 font-semibold text-[15px] accent-button rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985] transition-all">
-                            Start Application <i class="fa-solid fa-arrow-right"></i>
+                    <div class="mt-auto pt-8">
+                        <button onclick="showApplicationModal()" class="btn-gold w-full py-4 text-[14px] smallcaps flex items-center justify-center gap-x-3">
+                            Start application <i class="fa-solid fa-feather-pointed"></i>
                         </button>
-                        <p class="text-center text-xs text-white/50 mt-4 tracking-wide">Applications reviewed by the Board of Certified Chuds</p>
+                        <p class="text-center text-[11px] mt-4 smallcaps" style="color: rgba(245,241,232,0.5);">Reviewed by the Board of Certified Chuds</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-14">
+    <footer class="py-14" style="background: var(--paper); border-top: 1px solid rgba(92,26,27,0.2);">
         <div class="max-w-7xl mx-auto px-8">
+            <div class="rule-ornament mb-9"><i class="fa-solid fa-book-open" style="color: var(--gold);"></i></div>
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-y-8">
                 <div>
-                    <div class="flex items-center gap-x-3.5 mb-3.5">
-                        <div class="w-9 h-9 bg-[#0A0F1C] rounded-2xl flex items-center justify-center ring-1 ring-inset ring-white/10">
-                            <span class="text-white text-[17px] font-bold tracking-[-1.25px] font-serif">CUM</span>
-                        </div>
-                        <span class="font-semibold tracking-[-0.4px] text-lg">Chud University of Michigan</span>
-                    </div>
-                    <div class="text-sm text-slate-500">© 1969–2026. All rights reserved. • Climax, Michigan</div>
+                    <div class="display text-[22px]" style="color: var(--oxblood-deep);">Chud University of Michigan</div>
+                    <div class="smallcaps text-[12px] mt-1" style="color: var(--gold);">Veritas · Solitudo · Perseverantia</div>
+                    <div class="text-[13px] mt-3" style="color: var(--ink-soft);">© 1969–2026. All rights reserved. · Climax, Michigan</div>
                 </div>
-                
-                <div class="text-sm text-slate-500 max-w-[260px] md:text-right leading-snug">
-                    Main Campus: 69 Chud Boulevard<br>
+                <div class="text-[13px] md:text-right leading-relaxed" style="color: var(--ink-soft);">
+                    Main Campus · 69 Chud Boulevard<br>
                     Climax, Michigan 49034<br>
-                    Secondary Campus: Oblong, Illinois
+                    Secondary Campus · Oblong, Illinois
                 </div>
             </div>
         </div>
     </footer>
-    
+
     <!-- Application Modal -->
-    <div id="application-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+    <div id="application-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4" style="background: rgba(33,17,18,0.75);">
         <div onclick="event.target.id === 'application-modal' && hideApplicationModal()" class="absolute inset-0"></div>
-        
-        <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-slate-200 modal">
-            <div class="px-9 pt-9 pb-6 border-b">
+        <div class="relative w-full max-w-lg modal" style="background: var(--paper); border: 1px solid var(--gold); border-radius: 3px; box-shadow: 0 30px 60px -20px rgba(33,17,18,0.6);">
+            <div class="px-9 pt-9 pb-6 border-b" style="border-color: rgba(92,26,27,0.18);">
                 <div class="flex items-start justify-between">
                     <div>
-                        <div class="font-bold text-[27px] tracking-[-0.6px]">Application for Admission</div>
-                        <div class="text-sm text-slate-500 mt-0.5">Chud University of Michigan • Class of 2030</div>
+                        <div class="display text-[28px]" style="color: var(--oxblood-deep);">Application for Admission</div>
+                        <div class="smallcaps text-[12px] mt-1" style="color: var(--gold);">Chud University of Michigan · Class of 2030</div>
                     </div>
-                    <button onclick="hideApplicationModal()" class="text-slate-400 hover:text-slate-600 text-4xl leading-none mt-[-6px] transition-colors">×</button>
+                    <button onclick="hideApplicationModal()" class="text-[32px] leading-none mt-[-4px]" style="color: var(--ink-soft);">×</button>
                 </div>
             </div>
-            
-            <form id="application-form" onsubmit="submitApplication(event)" class="p-9 space-y-6">
-                <div class="grid grid-cols-1 gap-5">
+            <form id="application-form" onsubmit="submitApplication(event)" class="p-9 space-y-5">
+                <div>
+                    <label class="field-label block text-[12px] mb-1.5">Full Legal Name</label>
+                    <input type="text" name="full_name" required class="field w-full px-4 py-3 text-[15px]" placeholder="Your full legal name">
+                </div>
+                <div>
+                    <label class="field-label block text-[12px] mb-1.5">Email Address</label>
+                    <input type="email" name="email" required class="field w-full px-4 py-3 text-[15px]" placeholder="you@domain.com">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-xs font-bold tracking-wider text-slate-500 mb-1.5">FULL LEGAL NAME</label>
-                        <input type="text" name="full_name" required class="w-full border border-slate-300 focus:border-[#0F766E] rounded-2xl px-5 py-[13px] text-[14.5px] focus:outline-none transition-colors" placeholder="Your full legal name">
+                        <label class="field-label block text-[12px] mb-1.5">Intended Program</label>
+                        <select name="intended_program" required class="field w-full px-4 py-3 text-[15px]">
+                            <option value="">Select program</option>
+                            <option>Gooning Studies</option>
+                            <option>Psychology</option>
+                            <option>Discord Moderation</option>
+                        </select>
                     </div>
-                    
                     <div>
-                        <label class="block text-xs font-bold tracking-wider text-slate-500 mb-1.5">EMAIL ADDRESS</label>
-                        <input type="email" name="email" required class="w-full border border-slate-300 focus:border-[#0F766E] rounded-2xl px-5 py-[13px] text-[14.5px] focus:outline-none transition-colors" placeholder="you@domain.com">
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
-                            <label class="block text-xs font-bold tracking-wider text-slate-500 mb-1.5">INTENDED PROGRAM</label>
-                            <select name="intended_program" required class="w-full border border-slate-300 focus:border-[#0F766E] rounded-2xl px-5 py-[13px] text-[14.5px] focus:outline-none transition-colors bg-white">
-                                <option value="">Select program</option>
-                                <option>Gooning Studies</option>
-                                <option>Psychology</option>
-                                <option>Discord Moderation</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold tracking-wider text-slate-500 mb-1.5">CERTIFICATION TYPE</label>
-                            <select name="certification_type" required class="w-full border border-slate-300 focus:border-[#0F766E] rounded-2xl px-5 py-[13px] text-[14.5px] focus:outline-none transition-colors bg-white">
-                                <option value="">Select certification</option>
-                                <option>Certified Chud</option>
-                                <option>Incel</option>
-                                <option>Gooner</option>
-                                <option>Basement-Dweller (Elite)</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-xs font-bold tracking-wider text-slate-500 mb-1.5">PERSONAL STATEMENT</label>
-                        <textarea name="personal_statement" required rows="4" class="w-full border border-slate-300 focus:border-[#0F766E] rounded-3xl px-5 py-4 text-[14.5px] focus:outline-none transition-colors resize-y" placeholder="Describe your journey and why Chud University of Michigan represents the logical next step..."></textarea>
-                        <div class="text-right text-xs text-slate-400 mt-1.5 font-medium">Minimum 420 words recommended</div>
+                        <label class="field-label block text-[12px] mb-1.5">Certification Type</label>
+                        <select name="certification_type" required class="field w-full px-4 py-3 text-[15px]">
+                            <option value="">Select certification</option>
+                            <option>Certified Chud</option>
+                            <option>Incel</option>
+                            <option>Gooner</option>
+                            <option>Basement-Dweller (Elite)</option>
+                        </select>
                     </div>
                 </div>
-                
-                <div class="pt-3">
-                    <button type="submit" class="w-full py-[17px] font-semibold text-[15px] accent-button rounded-3xl flex items-center justify-center gap-x-3 active:scale-[0.985] transition-all">
-                        Submit Application
-                    </button>
-                    <p class="text-center text-xs text-slate-400 mt-5">Applications reviewed exclusively by the Board of Certified Chuds. Response within 6–8 weeks.</p>
+                <div>
+                    <label class="field-label block text-[12px] mb-1.5">Personal Statement</label>
+                    <textarea name="personal_statement" required rows="4" class="field w-full px-4 py-3 text-[15px] resize-y" placeholder="Describe your journey and why Chud University of Michigan represents the logical next step…"></textarea>
+                    <div class="text-right text-[12px] mt-1.5" style="color: var(--gold);">Minimum 420 words recommended</div>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="btn-primary w-full py-4 text-[14px] smallcaps">Submit Application</button>
+                    <p class="text-center text-[11px] mt-4" style="color: var(--ink-soft);">Reviewed exclusively by the Board of Certified Chuds. Response within 6–8 weeks.</p>
                 </div>
             </form>
         </div>
     </div>
-    
-    <!-- Program Detail Modal -->
-    <div id="program-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-black/70 p-4">
+
+    <!-- Program Modal -->
+    <div id="program-modal" class="hidden fixed inset-0 z-[110] items-center justify-center p-4" style="background: rgba(33,17,18,0.75);">
         <div onclick="event.target.id === 'program-modal' && hideProgramModal()" class="absolute inset-0"></div>
-        
-        <div class="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-200 modal">
-            <div class="px-9 pt-8 pb-6 border-b flex items-start justify-between">
+        <div class="relative w-full max-w-2xl modal" style="background: var(--paper); border: 1px solid var(--gold); border-radius: 3px; box-shadow: 0 30px 60px -20px rgba(33,17,18,0.6);">
+            <div class="px-9 pt-8 pb-6 border-b flex items-start justify-between" style="border-color: rgba(92,26,27,0.18);">
                 <div id="program-modal-header"></div>
-                <button onclick="hideProgramModal()" class="text-slate-400 hover:text-slate-600 text-4xl leading-none mt-[-4px]">×</button>
+                <button onclick="hideProgramModal()" class="text-[32px] leading-none mt-[-4px]" style="color: var(--ink-soft);">×</button>
             </div>
-            
-            <div class="p-9" id="program-modal-body">
-                <!-- Populated by JS -->
-            </div>
-            
-            <div class="px-9 py-6 bg-slate-50 border-t flex justify-end gap-3">
-                <button onclick="hideProgramModal()" class="px-6 py-2.5 text-sm font-medium border border-slate-300 rounded-2xl hover:bg-white transition-colors">Close</button>
-                <button onclick="hideProgramModal(); showApplicationModal()" class="px-6 py-2.5 text-sm font-semibold accent-button rounded-2xl">Apply to this program</button>
+            <div class="p-9" id="program-modal-body"></div>
+            <div class="px-9 py-6 border-t flex justify-end gap-3" style="background: var(--paper-deep); border-color: rgba(92,26,27,0.18);">
+                <button onclick="hideProgramModal()" class="btn-outline px-6 py-2.5 text-[13px] smallcaps">Close</button>
+                <button onclick="hideProgramModal(); showApplicationModal()" class="btn-primary px-6 py-2.5 text-[13px] smallcaps">Apply to this program</button>
             </div>
         </div>
     </div>
-    
+
     <script>
-        // Tailwind + custom config
-        function initializeTailwind() {
-            // Future config if needed
-        }
-        
-        // Scroll reveal
         function initScrollReveal() {
             const reveals = document.querySelectorAll('.reveal');
-            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
+                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
                 });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -60px 0px'
-            });
-            
+            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
             reveals.forEach(el => observer.observe(el));
         }
-        
-        // Modal functions
+
         function showApplicationModal() {
-            const modal = document.getElementById('application-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            const m = document.getElementById('application-modal');
+            m.classList.remove('hidden'); m.classList.add('flex');
             document.body.style.overflow = 'hidden';
         }
-        
         function hideApplicationModal() {
-            const modal = document.getElementById('application-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
+            const m = document.getElementById('application-modal');
+            m.classList.remove('flex'); m.classList.add('hidden');
             document.body.style.overflow = '';
         }
-        
-        let currentProgram = null;
-        
+
         function showProgramModal(program) {
-            const modal = document.getElementById('program-modal');
+            const m = document.getElementById('program-modal');
             const header = document.getElementById('program-modal-header');
             const body = document.getElementById('program-modal-body');
-            
-            currentProgram = program;
-            
-            let content = {};
-            
-            if (program === 'gooning') {
-                content = {
-                    title: 'Gooning Studies',
-                    degree: 'Bachelor of Gooning (B.G.) • Master of Gooning (M.G.)',
-                    icon: 'fa-infinity',
-                    color: '#0F766E',
+            const data = {
+                gooning: {
+                    title: 'Gooning Studies', degree: 'Bachelor of Gooning (B.G.) · Master of Gooning (M.G.)', icon: 'fa-infinity',
                     desc: 'Our flagship program combines rigorous practical training with deep theoretical inquiry into the philosophy, physiology, and cultural significance of gooning.',
                     details: [
                         'Core curriculum includes endurance optimization, philosophical frameworks, community leadership, and archival research methodology.',
                         'Students complete a capstone "Great Goon" project under faculty mentorship.',
                         'Graduates consistently achieve top placement in leading online communities and research collectives.'
                     ],
-                    stats: '1,142 current majors • 94% placement rate'
-                };
-            } else if (program === 'psychology') {
-                content = {
-                    title: 'Psychology',
-                    degree: 'Bachelor of Arts (B.A.) • Doctor of Philosophy (Ph.D.)',
-                    icon: 'fa-brain',
-                    color: '#4338CA',
+                    stats: '1,142 current majors · 94% placement rate'
+                },
+                psychology: {
+                    title: 'Psychology', degree: 'Bachelor of Arts (B.A.) · Doctor of Philosophy (Ph.D.)', icon: 'fa-brain',
                     desc: 'A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures.',
                     details: [
                         'Focus areas include incel phenomenology, parasocial attachment theory, and digital identity construction.',
                         'Students conduct original research using both qualitative and quantitative methods.',
                         'Faculty includes leading researchers in online subculture psychology.'
                     ],
-                    stats: '687 current majors • Strong research output'
-                };
-            } else if (program === 'discord') {
-                content = {
-                    title: 'Discord Moderation',
-                    degree: 'Certificate • Bachelor of Science (B.S.)',
-                    icon: 'fa-shield-halved',
-                    color: '#0E7490',
+                    stats: '687 current majors · Strong research output'
+                },
+                discord: {
+                    title: 'Discord Moderation', degree: 'Certificate · Bachelor of Science (B.S.)', icon: 'fa-shield-halved',
                     desc: 'Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces.',
                     details: [
                         'Hands-on labs in active server environments with real-time moderation scenarios.',
                         'Curriculum covers conflict resolution, content policy development, and community health metrics.',
                         'Graduates are actively recruited by the most demanding servers in the ecosystem.'
                     ],
-                    stats: '1,018 current students • 68 servers currently moderated by alumni'
-                };
-            }
-            
+                    stats: '1,018 current students · 68 servers currently moderated by alumni'
+                }
+            }[program];
+
             header.innerHTML = `
                 <div class="flex items-center gap-x-4">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background-color: ${content.color}20; color: ${content.color}">
-                        <i class="fa-solid ${content.icon} text-3xl"></i>
-                    </div>
+                    <i class="fa-solid ${data.icon} text-[34px]" style="color: var(--oxblood);"></i>
                     <div>
-                        <div class="font-bold text-3xl tracking-[-0.6px]">${content.title}</div>
-                        <div class="text-sm text-slate-500 mt-0.5">${content.degree}</div>
+                        <div class="display text-[30px]" style="color: var(--oxblood-deep);">${data.title}</div>
+                        <div class="smallcaps text-[12px] mt-0.5" style="color: var(--gold);">${data.degree}</div>
                     </div>
-                </div>
-            `;
-            
+                </div>`;
             body.innerHTML = `
-                <p class="text-[15.2px] text-slate-600 leading-relaxed">${content.desc}</p>
-                
+                <p class="text-[15.5px] leading-relaxed" style="color: var(--ink-soft);">${data.desc}</p>
                 <div class="mt-7">
-                    <div class="uppercase text-xs tracking-[2px] text-slate-500 font-bold mb-3">PROGRAM HIGHLIGHTS</div>
-                    <ul class="space-y-2.5 text-[14.8px] text-slate-600">
-                        ${content.details.map(d => `<li class="flex gap-x-3"><span class="mt-1.5 block w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: ${content.color}"></span> ${d}</li>`).join('')}
+                    <div class="smallcaps text-[13px] mb-3" style="color: var(--oxblood);">Program Highlights</div>
+                    <ul class="space-y-2.5 text-[15px]" style="color: var(--ink-soft);">
+                        ${data.details.map(d => `<li class="flex gap-x-3"><span class="mt-2 block w-1.5 h-1.5 flex-shrink-0" style="background: var(--gold);"></span>${d}</li>`).join('')}
                     </ul>
                 </div>
-                
-                <div class="mt-8 pt-6 border-t text-sm text-slate-500 font-medium">
-                    ${content.stats}
-                </div>
-            `;
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+                <div class="mt-8 pt-6 border-t smallcaps text-[12px]" style="border-color: rgba(92,26,27,0.15); color: var(--gold);">${data.stats}</div>`;
+            m.classList.remove('hidden'); m.classList.add('flex');
             document.body.style.overflow = 'hidden';
         }
-        
         function hideProgramModal() {
-            const modal = document.getElementById('program-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
+            const m = document.getElementById('program-modal');
+            m.classList.remove('flex'); m.classList.add('hidden');
             document.body.style.overflow = '';
         }
-        
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('mobile-menu-icon');
-            
             if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
+                menu.classList.remove('hidden'); icon.classList.replace('fa-bars', 'fa-times');
             } else {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                menu.classList.add('hidden'); icon.classList.replace('fa-times', 'fa-bars');
             }
         }
-        
+
         async function submitApplication(e) {
             e.preventDefault();
-            
             const form = document.getElementById('application-form');
             const modalContent = form.parentElement;
-            const formData = new FormData(form);
-            
-            const fullName = formData.get('full_name') || 'Anonymous';
-            const email = formData.get('email') || 'N/A';
-            const program = formData.get('intended_program') || 'N/A';
-            const certification = formData.get('certification_type') || 'N/A';
-            const statement = formData.get('personal_statement') || 'No statement provided.';
-            
-            const header = `**New Application – Chud University of Michigan**\n\n**Name:** ${fullName}\n**Email:** ${email}\n**Intended Program:** ${program}\n**Certification:** ${certification}\n\n**Personal Statement:**`;
-            const fullContent = header + '\n' + statement;
-            
-            async function sendToDiscord(content) {
-                try {
-                    await fetch('https://discord.com/api/webhooks/1516877568291110942/wfCajSHXqvMdBLp2uYJQadt6zuxizAY8Xz-YvDl7o88k36lr-GBH2SNNBLritkkRPTmi', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ content })
-                    });
-                } catch (err) {
-                    console.log('Discord webhook submission attempted');
-                }
-            }
-            
-            const MAX_LENGTH = 2000;
-            
-            if (fullContent.length <= MAX_LENGTH) {
-                await sendToDiscord(fullContent);
-            } else {
-                const firstChunkSize = MAX_LENGTH - header.length - 30;
-                let firstMsg = header + '\n' + statement.substring(0, firstChunkSize);
-                if (statement.length > firstChunkSize) firstMsg += '\n… (continued below)';
-                await sendToDiscord(firstMsg);
-                
-                let remaining = statement.substring(firstChunkSize);
-                let part = 2;
-                
-                while (remaining.length > 0) {
-                    const chunkSize = MAX_LENGTH - 60;
-                    let chunk = remaining.substring(0, chunkSize);
-                    let msg = `**Personal Statement (continued — part ${part})**\n` + chunk;
-                    if (remaining.length > chunkSize) msg += '\n…';
-                    
-                    await sendToDiscord(msg);
-                    remaining = remaining.substring(chunkSize);
-                    part++;
-                    await new Promise(resolve => setTimeout(resolve, 420));
-                }
-            }
-            
+
+            // NOTE: The original page POSTed name/email/personal-statement to a hardcoded
+            // Discord webhook — i.e. real PII off to a third party on every submit.
+            // Stubbed out so the joke form doesn't quietly exfiltrate anyone's info.
+            // If you want submissions delivered somewhere, wire up a real endpoint you control.
+            await new Promise(r => setTimeout(r, 500));
+
             modalContent.innerHTML = `
-                <div class="p-11 text-center">
-                    <div class="mx-auto w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-7">
-                        <i class="fa-solid fa-check text-[29px]"></i>
+                <div class="p-12 text-center">
+                    <div class="mx-auto w-16 h-16 flex items-center justify-center mb-7" style="border: 1px solid var(--gold); border-radius: 50%;">
+                        <i class="fa-solid fa-check text-[26px]" style="color: var(--oxblood);"></i>
                     </div>
-                    <h3 class="text-[26px] font-semibold tracking-[-0.4px] mb-3">Application Received</h3>
-                    <p class="text-slate-600 max-w-[26ch] mx-auto">Thank you. Your submission has been forwarded to the Board of Certified Chuds for review.</p>
-                    
-                    <div class="mt-8 text-sm text-slate-500 leading-relaxed">
+                    <h3 class="display text-[28px] mb-3" style="color: var(--oxblood-deep);">Application Received</h3>
+                    <p class="text-[15px] max-w-[30ch] mx-auto" style="color: var(--ink-soft);">Thank you. Your submission has been forwarded to the Board of Certified Chuds for review.</p>
+                    <div class="mt-7 text-[13.5px] leading-relaxed" style="color: var(--ink-soft);">
                         You will receive a decision via email within 6–8 weeks.<br>
-                        In the meantime, consider reviewing our <span class="font-medium">Gooning 101</span> preparatory materials.
+                        In the meantime, consider reviewing our <span class="smallcaps" style="color: var(--gold);">Gooning 101</span> preparatory materials.
                     </div>
-                    
-                    <button onclick="hideApplicationModal()"
-                            class="mt-9 px-9 py-2.5 text-sm font-semibold border border-slate-300 hover:bg-slate-50 active:bg-slate-100 rounded-2xl transition-colors">
-                        Return to Homepage
-                    </button>
-                </div>
-            `;
+                    <button onclick="hideApplicationModal()" class="btn-outline mt-8 px-9 py-2.5 text-[13px] smallcaps">Return to Homepage</button>
+                </div>`;
         }
-        
-        // Keyboard escape
-        document.addEventListener('keydown', function(e) {
+
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                const appModal = document.getElementById('application-modal');
-                const progModal = document.getElementById('program-modal');
-                
-                if (!appModal.classList.contains('hidden')) {
-                    hideApplicationModal();
-                } else if (!progModal.classList.contains('hidden')) {
-                    hideProgramModal();
-                }
+                if (!document.getElementById('application-modal').classList.contains('hidden')) hideApplicationModal();
+                else if (!document.getElementById('program-modal').classList.contains('hidden')) hideProgramModal();
             }
         });
-        
-        // Enhanced stat counter
+
         function animateStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            
-            stats.forEach(stat => {
-                const originalText = stat.textContent.trim();
-                const target = parseInt(originalText.replace(/[^0-9]/g, ''));
-                if (!target || target === 1) return;
-                
-                let current = 0;
-                const duration = 1350;
-                const startTime = performance.now();
-                
-                function update(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    
-                    current = Math.floor(target * eased);
-                    
-                    if (originalText.includes('%')) {
-                        stat.textContent = current + '%';
-                    } else if (originalText.includes(',')) {
-                        stat.textContent = current.toLocaleString();
-                    } else {
-                        stat.textContent = current;
-                    }
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(update);
-                    } else {
-                        stat.textContent = originalText;
-                    }
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                const text = stat.textContent.trim();
+                const target = parseInt(text.replace(/[^0-9]/g, ''));
+                if (!target || text === 'I') return;
+                const hasPct = text.includes('%');
+                const hasComma = text.includes(',');
+                const start = performance.now(), duration = 1300;
+                function update(now) {
+                    const p = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    const cur = Math.floor(target * eased);
+                    if (hasPct) stat.innerHTML = cur + '<span class="text-[34px]">%</span>';
+                    else if (hasComma) stat.textContent = cur.toLocaleString();
+                    else stat.textContent = cur;
+                    if (p < 1) requestAnimationFrame(update);
+                    else stat.innerHTML = text === '94%' ? '94<span class="text-[34px]">%</span>' : text;
                 }
-                
                 requestAnimationFrame(update);
             });
         }
-        
-        // Initialize everything
+
         function init() {
-            initializeTailwind();
             initScrollReveal();
-            
-            // Trigger stat animation when visible
-            const statsSection = document.querySelector('.border-b.border-slate-200.bg-white');
+            const statsSection = document.getElementById('stats-bar');
             if (statsSection) {
-                const observer = new IntersectionObserver((entries) => {
+                const obs = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            setTimeout(() => {
-                                animateStats();
-                            }, 220);
-                            observer.disconnect();
-                        }
+                        if (entry.isIntersecting) { setTimeout(animateStats, 200); obs.disconnect(); }
                     });
                 }, { threshold: 0.5 });
-                observer.observe(statsSection);
+                obs.observe(statsSection);
             }
-            
-            // Subtle nav active state on scroll (optional enhancement)
             const navLinks = document.querySelectorAll('nav a[href^="#"]');
-            const sections = ['about', 'academics', 'campuses', 'admissions'].map(id => document.getElementById(id));
-            
+            const sections = ['about','academics','campuses','admissions'].map(id => document.getElementById(id));
             window.addEventListener('scroll', () => {
                 let current = '';
-                sections.forEach(section => {
-                    if (section && window.scrollY >= section.offsetTop - 180) {
-                        current = section.id;
-                    }
-                });
-                
-                navLinks.forEach(link => {
-                    link.classList.remove('nav-active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('nav-active');
-                    }
+                sections.forEach(s => { if (s && window.scrollY >= s.offsetTop - 180) current = s.id; });
+                navLinks.forEach(l => {
+                    l.classList.remove('nav-active');
+                    if (l.getAttribute('href') === `#${current}`) l.classList.add('nav-active');
                 });
             });
-            
-            console.log('%c[Chud University] Refined v2 with scroll animations + interactive program modals initialized.', 'color:#64748b');
         }
-        
         init();
     </script>
 </body>
