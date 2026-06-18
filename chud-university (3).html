@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chud University of Michigan • Official Homepage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Inter:wght@400;500;600&amp;display=swap');
+        
+        :root {
+            --navy: #0F172A;
+            --accent: #1E40AF;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .university-nav {
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            color: #0F172A;
+            letter-spacing: -0.04em;
+        }
+
+        .academic-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .academic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.1);
+        }
+
+        .nav-link {
+            color: #475569;
+            transition: color 0.1s ease;
+        }
+        
+        .nav-link:hover {
+            color: #0F172A;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.75));
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .testimonial {
+            position: relative;
+        }
+        
+        .testimonial::before {
+            content: '“';
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 6rem;
+            line-height: 1;
+            color: #CBD5E1;
+            position: absolute;
+            top: -1.5rem;
+            left: 1.5rem;
+            z-index: 0;
+        }
+
+        .formal-button {
+            background-color: #0F172A;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .formal-button:hover {
+            background-color: #1E2937;
+            transform: translateY(-1px);
+        }
+
+        .accent-button {
+            background-color: #1E40AF;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .accent-button:hover {
+            background-color: #1E3A8A;
+        }
+
+        .campus-card {
+            border: 1px solid #E2E8F0;
+        }
+
+        .program-badge {
+            background-color: #EEF2FF;
+            color: #1E40AF;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.625rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Navigation -->
+    <nav class="university-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-x-3">
+                    <div class="w-11 h-11 bg-[#0F172A] rounded flex items-center justify-center">
+                        <span class="text-white text-xl font-bold tracking-tighter">CUM</span>
+                    </div>
+                    <div>
+                        <div class="font-bold text-xl md:text-2xl tracking-tighter text-[#0F172A]">Chud University of Michigan</div>
+                        <div class="text-[10px] text-slate-500 -mt-1 tracking-[1.5px]">EST. 1969</div>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-x-9 text-sm font-medium">
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#academics" class="nav-link">Academics</a>
+                    <a href="#campuses" class="nav-link">Campuses</a>
+                    <a href="#admissions" class="nav-link">Admissions</a>
+                </div>
+
+                <!-- CTA -->
+                <div class="flex items-center gap-x-3">
+                    <button onclick="showApplicationModal()"
+                            class="hidden md:block px-6 py-2.5 text-sm font-semibold formal-button rounded-lg">
+                        Apply Now
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center text-slate-600 hover:text-slate-900">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex flex-col gap-y-1 text-sm font-medium">
+            <a href="#about" onclick="toggleMobileMenu()" class="nav-link py-2.5 px-1 border-b border-slate-100 last:border-none">About</a>
+            <a href="#academics" onclick="toggleMobileMenu()" class="nav-link py-2.5 px-1 border-b border-slate-100 last:border-none">Academics</a>
+            <a href="#campuses" onclick="toggleMobileMenu()" class="nav-link py-2.5 px-1 border-b border-slate-100 last:border-none">Campuses</a>
+            <a href="#admissions" onclick="toggleMobileMenu()" class="nav-link py-2.5 px-1 border-b border-slate-100 last:border-none">Admissions</a>
+            
+            <button onclick="showApplicationModal(); toggleMobileMenu()" 
+                    class="mt-4 w-full py-3 text-sm font-semibold formal-button rounded-lg">
+                Apply Now
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative h-[620px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center" 
+             style="background-image: url('https://picsum.photos/id/1015/2000/1200')">
+        </div>
+        <div class="hero-overlay absolute inset-0"></div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto px-8 text-center">
+            <div class="inline-flex items-center gap-x-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full mb-6 border border-white/20">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span class="text-white text-sm font-medium tracking-wider">RANKED #1 BY THE GOONING ASSOCIATION OF AMERICA</span>
+            </div>
+            
+            <h1 class="text-white text-7xl md:text-8xl font-bold tracking-tighter heading-serif mb-4">Chud University of Michigan</h1>
+            <p class="text-white/90 text-2xl md:text-3xl font-light tracking-tight mb-8">Excellence in Gooning, Psychology &amp; Digital Governance</p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="showApplicationModal()"
+                        class="px-10 py-4 text-lg font-semibold accent-button rounded-xl flex items-center justify-center gap-x-3 shadow-xl shadow-blue-950/30">
+                    <span>Begin Your Application</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })"
+                        class="px-8 py-4 text-lg font-medium bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-xl backdrop-blur-sm transition-colors">
+                    Learn More
+                </button>
+            </div>
+            
+            <div class="mt-10 flex items-center justify-center gap-x-8 text-white/70 text-sm">
+                <div class="flex items-center gap-x-2">
+                    <i class="fa-solid fa-map-marker-alt"></i>
+                    <span>Climax, Michigan</span>
+                </div>
+                <div class="hidden sm:block w-px h-3 bg-white/30"></div>
+                <div class="flex items-center gap-x-2">
+                    <i class="fa-solid fa-map-marker-alt"></i>
+                    <span>Oblong, Illinois</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="max-w-7xl mx-auto px-8 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold text-[#0F172A] stat-number">1</div>
+                    <div class="text-sm text-slate-600 mt-1 tracking-wider">NATIONAL RANKING IN GOONING</div>
+                    <div class="text-xs text-slate-500">Gooning Association of America, 2025</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-[#0F172A] stat-number">2,847</div>
+                    <div class="text-sm text-slate-600 mt-1 tracking-wider">CURRENTLY ENROLLED</div>
+                    <div class="text-xs text-slate-500">Certified chuds, incels &amp; gooners</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-[#0F172A] stat-number">94%</div>
+                    <div class="text-sm text-slate-600 mt-1 tracking-wider">GOON PLACEMENT RATE</div>
+                    <div class="text-xs text-slate-500">Within 6 months of graduation</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-[#0F172A] stat-number">68</div>
+                    <div class="text-sm text-slate-600 mt-1 tracking-wider">DISCORD SERVERS MODERATED</div>
+                    <div class="text-xs text-slate-500">By current student body</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="max-w-5xl mx-auto px-8 pt-20 pb-16">
+        <div class="max-w-3xl">
+            <div class="uppercase text-xs tracking-[3px] text-[#1E40AF] font-semibold mb-3">Our Legacy</div>
+            <h2 class="section-header mb-6">A distinguished institution dedicated to the advancement of specialized scholarship.</h2>
+            
+            <div class="prose prose-slate text-[15px] leading-relaxed text-slate-600">
+                <p>Founded in 1969 in the historic village of Climax, Michigan, Chud University of Michigan has established itself as the premier destination for individuals seeking rigorous training in gooning, psychological inquiry, and the nuanced art of digital community moderation.</p>
+                
+                <p class="mt-4">We maintain an intentionally selective admissions process. The University extends invitations exclusively to certified chuds, incels, gooners, and the finest basement-dwellers who demonstrate exceptional promise in their respective domains. Our community is built upon a shared commitment to intellectual honesty, digital fluency, and the pursuit of mastery in environments often misunderstood by conventional academia.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Programs -->
+    <section id="academics" class="bg-white border-y border-slate-200 py-16">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <div class="uppercase text-xs tracking-[3px] text-[#1E40AF] font-semibold mb-2">Signature Programs</div>
+                    <h2 class="section-header">Academic Offerings</h2>
+                </div>
+                <a href="#" class="hidden md:flex items-center text-sm font-medium text-[#1E40AF] hover:text-[#1E3A8A]">
+                    View full course catalog <i class="fa-solid fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Gooning -->
+                <div class="academic-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-infinity text-2xl"></i>
+                        </div>
+                        <span class="program-badge">B.G. • M.G.</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold tracking-tight mb-3">Gooning Studies</h3>
+                    <p class="text-slate-600 flex-1">Our flagship discipline. Students engage in intensive, supervised practice and theoretical analysis of gooning methodology, endurance optimization, and philosophical frameworks. Graduates routinely secure positions as lead gooners at top-tier online communities and research collectives.</p>
+                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>1,142 current majors</span>
+                    </div>
+                </div>
+
+                <!-- Psychology -->
+                <div class="academic-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-violet-100 text-violet-700 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-brain text-2xl"></i>
+                        </div>
+                        <span class="program-badge">B.A. • Ph.D.</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold tracking-tight mb-3">Psychology</h3>
+                    <p class="text-slate-600 flex-1">A specialized curriculum examining the contemporary male experience, online identity formation, and the psychological dimensions of digital subcultures. Faculty include leading researchers in incel phenomenology and parasocial attachment theory.</p>
+                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>687 current majors</span>
+                    </div>
+                </div>
+
+                <!-- Discord Moderation -->
+                <div class="academic-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-shield-halved text-2xl"></i>
+                        </div>
+                        <span class="program-badge">Certificate • B.S.</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold tracking-tight mb-3">Discord Moderation</h3>
+                    <p class="text-slate-600 flex-1">Professional training in rule adjudication, de-escalation techniques, meme governance, and the cultivation of high-signal digital spaces. Our graduates are actively recruited by the most demanding servers in the ecosystem.</p>
+                    <div class="pt-6 mt-auto border-t border-slate-100 text-sm text-slate-500 flex items-center gap-x-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>1,018 current students</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recognition -->
+    <section class="max-w-5xl mx-auto px-8 py-16 text-center">
+        <div class="inline-block bg-[#0F172A] text-white px-5 py-1.5 rounded text-sm font-semibold tracking-wider mb-4">INSTITUTIONAL DISTINCTION</div>
+        <h2 class="text-4xl font-bold tracking-tighter mb-4">Ranked #1 Hotspot for Gooning</h2>
+        <p class="text-xl text-slate-600 max-w-md mx-auto">Gooning Association of America — Annual Rankings, 2025</p>
+        
+        <div class="mt-8 flex justify-center">
+            <div class="flex items-center gap-x-2 text-sm bg-white border border-slate-200 px-5 py-3 rounded-2xl">
+                <i class="fa-solid fa-trophy text-amber-500"></i>
+                <span class="font-medium">Also recognized for excellence in basement scholarship and digital asceticism</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-white border-y border-slate-200 py-16">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="mb-10">
+                <div class="uppercase text-xs tracking-[3px] text-[#1E40AF] font-semibold mb-2">From Our Alumni</div>
+                <h2 class="section-header">Voices from the Community</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="testimonial bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <p class="text-slate-700 italic leading-relaxed relative z-10">"Quite the hole in the wall."</p>
+                    <div class="mt-8 flex items-center gap-x-4">
+                        <div class="w-10 h-10 bg-slate-300 rounded-full flex-shrink-0 overflow-hidden">
+                            <img src="https://picsum.photos/id/64/40/40" alt="Davi Ferreria" class="object-cover">
+                        </div>
+                        <div>
+                            <div class="font-semibold">Davi Ferreria</div>
+                            <div class="text-sm text-slate-500">Class of 2019 • Gooning Studies</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <p class="text-slate-700 italic leading-relaxed relative z-10">"This place is amazing. If only I had a better view of the ocean..."</p>
+                    <div class="mt-8 flex items-center gap-x-4">
+                        <div class="w-10 h-10 bg-slate-300 rounded-full flex-shrink-0 overflow-hidden">
+                            <img src="https://picsum.photos/id/1005/40/40" alt="Effrey Jepstein" class="object-cover">
+                        </div>
+                        <div>
+                            <div class="font-semibold">Effrey Jepstein</div>
+                            <div class="text-sm text-slate-500">Class of 1997 • Psychology</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial bg-slate-50 border border-slate-200 rounded-2xl p-8">
+                    <p class="text-slate-700 italic leading-relaxed relative z-10">"Best place to find quality kittens on a budget... This is anonymous right?"</p>
+                    <div class="mt-8 flex items-center gap-x-4">
+                        <div class="w-10 h-10 bg-slate-300 rounded-full flex-shrink-0 overflow-hidden">
+                            <img src="https://picsum.photos/id/201/40/40" alt="M'Elon M. Usk" class="object-cover">
+                        </div>
+                        <div>
+                            <div class="font-semibold">M'Elon M. Usk</div>
+                            <div class="text-sm text-slate-500">Class of 1976 • Discord Moderation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campuses -->
+    <section id="campuses" class="max-w-7xl mx-auto px-8 py-20">
+        <div class="mb-10">
+            <div class="uppercase text-xs tracking-[3px] text-[#1E40AF] font-semibold mb-2">Locations</div>
+            <h2 class="section-header">Our Campuses</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Main Campus -->
+            <div class="campus-card bg-white rounded-3xl overflow-hidden">
+                <div class="h-56 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/160/800/600')"></div>
+                <div class="p-8">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold tracking-wider rounded">MAIN CAMPUS</span>
+                    </div>
+                    <h3 class="text-3xl font-semibold tracking-tight">Climax, Michigan</h3>
+                    <p class="mt-3 text-slate-600">Our historic flagship campus occupies a serene 340-acre site in southwestern Michigan. The grounds feature dedicated gooning pavilions, extensive basement archives, and the university’s renowned Center for Digital Asceticism. The intimate scale fosters deep mentorship between faculty and the student body.</p>
+                    
+                    <div class="mt-6 text-sm flex items-center gap-x-2 text-slate-500">
+                        <i class="fa-solid fa-home"></i>
+                        <span>1,892 students • 89 faculty residences</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Campus -->
+            <div class="campus-card bg-white rounded-3xl overflow-hidden">
+                <div class="h-56 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/251/800/600')"></div>
+                <div class="p-8">
+                    <div class="flex items-center gap-x-3 mb-4">
+                        <span class="px-3 py-1 bg-sky-100 text-sky-700 text-xs font-bold tracking-wider rounded">SECONDARY CAMPUS</span>
+                    </div>
+                    <h3 class="text-3xl font-semibold tracking-tight">Oblong, Illinois</h3>
+                    <p class="mt-3 text-slate-600">Our innovative satellite campus in rural Illinois provides expanded facilities for advanced Discord moderation laboratories and large-scale gooning symposiums. The open landscape offers unique opportunities for off-grid digital practice and contemplative fieldwork.</p>
+                    
+                    <div class="mt-6 text-sm flex items-center gap-x-2 text-slate-500">
+                        <i class="fa-solid fa-home"></i>
+                        <span>955 students • 41 faculty residences</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admissions -->
+    <section id="admissions" class="bg-[#0F172A] text-white py-16">
+        <div class="max-w-5xl mx-auto px-8">
+            <div class="max-w-3xl">
+                <div class="uppercase tracking-[3px] text-xs text-white/60 font-semibold mb-3">Selective Admissions</div>
+                <h2 class="text-white text-5xl font-bold tracking-tighter mb-6">Who Belongs at Chud University of Michigan</h2>
+                
+                <div class="text-lg text-white/90 leading-relaxed space-y-4">
+                    <p>Chud University of Michigan maintains one of the most focused admissions policies in higher education. We accept applications exclusively from certified chuds, incels, gooners, and the finest basement-dwellers.</p>
+                    
+                    <p>Prospective students are expected to demonstrate meaningful engagement with the core disciplines through documented practice, community contributions, and a compelling personal statement articulating their intellectual and practical commitment.</p>
+                </div>
+            </div>
+
+            <div class="mt-10 grid md:grid-cols-2 gap-4">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-7">
+                    <div class="font-semibold mb-4 flex items-center gap-x-2">
+                        <i class="fa-solid fa-check-circle text-emerald-400"></i>
+                        <span>Application Requirements</span>
+                    </div>
+                    <ul class="space-y-2.5 text-sm text-white/80">
+                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-1">01</span> Completed online application</li>
+                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-1">02</span> Certification documentation (chud/incel/gooner/basement-dweller)</li>
+                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-1">03</span> Portfolio of relevant work (memes, server logs, manifestos)</li>
+                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-1">04</span> Two letters of recommendation from verified online peers</li>
+                        <li class="flex gap-x-3"><span class="font-mono text-xs mt-1">05</span> Personal statement (minimum 420 words)</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-7 flex flex-col">
+                    <div>
+                        <div class="font-semibold mb-4">Application Cycle</div>
+                        <div class="text-sm text-white/80 space-y-1">
+                            <div>Early Action: November 1</div>
+                            <div>Regular Decision: January 15</div>
+                            <div class="pt-1 text-xs text-white/60">Decisions released on a rolling basis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-auto pt-8">
+                        <button onclick="showApplicationModal()"
+                                class="w-full py-3.5 font-semibold accent-button rounded-xl flex items-center justify-center gap-x-2 text-base">
+                            Start Application <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <p class="text-center text-xs text-white/50 mt-3">Applications reviewed by the Board of Certified Chuds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-y-8">
+                <div>
+                    <div class="flex items-center gap-x-3 mb-3">
+                        <div class="w-8 h-8 bg-[#0F172A] rounded flex items-center justify-center">
+                            <span class="text-white text-base font-bold tracking-tighter">CUM</span>
+                        </div>
+                        <span class="font-semibold tracking-tight">Chud University of Michigan</span>
+                    </div>
+                    <div class="text-sm text-slate-500">© 1969–2026. All rights reserved.</div>
+                </div>
+
+                <div class="text-sm text-slate-500 max-w-xs md:text-right">
+                    Main Campus<br>
+                    69 Chud Boulevard, Climax, Michigan 49034<br>
+                    Secondary Campus: Oblong, Illinois
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Modal -->
+    <div id="application-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
+        <div onclick="event.target.id === 'application-modal' && hideApplicationModal()" class="absolute inset-0"></div>
+        
+        <div class="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-8 pt-8 pb-6 border-b">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <div class="font-bold text-2xl tracking-tight">Application for Admission</div>
+                        <div class="text-sm text-slate-500">Chud University of Michigan • Class of 2030</div>
+                    </div>
+                    <button onclick="hideApplicationModal()" class="text-slate-400 hover:text-slate-600 text-3xl leading-none mt-[-4px]">×</button>
+                </div>
+            </div>
+
+            <form id="application-form" onsubmit="submitApplication(event)" class="p-8 space-y-6">
+                <div class="grid grid-cols-1 gap-5">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">FULL LEGAL NAME</label>
+                        <input type="text" name="full_name" required class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1E40AF]" placeholder="Your full name">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">EMAIL ADDRESS</label>
+                        <input type="email" name="email" required class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1E40AF]" placeholder="you@domain.com">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-5">
+                        <!-- Program -->
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">INTENDED PROGRAM</label>
+                            <select name="intended_program" required class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1E40AF] bg-white">
+                                <option value="">Select program</option>
+                                <option>Gooning Studies</option>
+                                <option>Psychology</option>
+                                <option>Discord Moderation</option>
+                            </select>
+                        </div>
+
+                        <!-- Certification -->
+                        <div>
+                            <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">CERTIFICATION TYPE</label>
+                            <select name="certification_type" required class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#1E40AF] bg-white">
+                                <option value="">Select certification</option>
+                                <option>Certified Chud</option>
+                                <option>Incel</option>
+                                <option>Gooner</option>
+                                <option>Basement-Dweller (Elite)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Personal Statement -->
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-500 mb-1.5">PERSONAL STATEMENT</label>
+                        <textarea name="personal_statement" required rows="4" class="w-full border border-slate-300 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:border-[#1E40AF] resize-y" placeholder="Describe your journey and why Chud University of Michigan represents the logical next step in your development..."></textarea>
+                        <div class="text-right text-xs text-slate-400 mt-1">Minimum 420 words recommended</div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full py-[17px] font-semibold text-base accent-button rounded-2xl flex items-center justify-center gap-x-2">
+                        Submit Application
+                    </button>
+                    <p class="text-center text-xs text-slate-400 mt-4">Applications are reviewed exclusively by the Board of Certified Chuds. Response within 6–8 weeks.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#1E40AF');
+        }
+
+        // Modal functions
+        function showApplicationModal() {
+            const modal = document.getElementById('application-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideApplicationModal() {
+            const modal = document.getElementById('application-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        async function submitApplication(e) {
+            e.preventDefault();
+            
+            const form = document.getElementById('application-form');
+            const modalContent = form.parentElement;
+            const formData = new FormData(form);
+
+            // Build message parts
+            const fullName = formData.get('full_name') || 'Anonymous';
+            const email = formData.get('email') || 'N/A';
+            const program = formData.get('intended_program') || 'N/A';
+            const certification = formData.get('certification_type') || 'N/A';
+            const statement = formData.get('personal_statement') || 'No statement provided.';
+
+            const header = `**New Application – Chud University of Michigan**\n\n**Name:** ${fullName}\n**Email:** ${email}\n**Intended Program:** ${program}\n**Certification:** ${certification}\n\n**Personal Statement:**`;
+            const fullContent = header + '\n' + statement;
+
+            // Helper to send one message to the webhook
+            async function sendToDiscord(content) {
+                try {
+                    await fetch('https://discord.com/api/webhooks/1516877568291110942/wfCajSHXqvMdBLp2uYJQadt6zuxizAY8Xz-YvDl7o88k36lr-GBH2SNNBLritkkRPTmi', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content })
+                    });
+                } catch (err) {
+                    console.log('POST to Discord webhook attempted');
+                }
+            }
+
+            const MAX_LENGTH = 2000;
+
+            if (fullContent.length <= MAX_LENGTH) {
+                await sendToDiscord(fullContent);
+            } else {
+                // First message: header + start of statement
+                const firstChunkSize = MAX_LENGTH - header.length - 30;
+                let firstMsg = header + '\n' + statement.substring(0, firstChunkSize);
+                if (statement.length > firstChunkSize) firstMsg += '\n… (continued below)';
+                await sendToDiscord(firstMsg);
+
+                // Send remaining parts of the statement
+                let remaining = statement.substring(firstChunkSize);
+                let part = 2;
+                while (remaining.length > 0) {
+                    const chunkSize = MAX_LENGTH - 60;
+                    let chunk = remaining.substring(0, chunkSize);
+                    let msg = `**Personal Statement (continued — part ${part})**\n` + chunk;
+                    if (remaining.length > chunkSize) msg += '\n…';
+                    await sendToDiscord(msg);
+
+                    remaining = remaining.substring(chunkSize);
+                    part++;
+
+                    // Small delay to respect Discord rate limits
+                    await new Promise(resolve => setTimeout(resolve, 400));
+                }
+            }
+
+            // Show success state regardless
+            modalContent.innerHTML = `
+                <div class="p-10 text-center">
+                    <div class="mx-auto w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fa-solid fa-check text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold tracking-tight mb-3">Application Received</h3>
+                    <p class="text-slate-600 max-w-xs mx-auto">Thank you. Your submission has been forwarded to the Board of Certified Chuds for review.</p>
+                    
+                    <div class="mt-8 text-sm text-slate-500">
+                        You will receive a decision via email within 6–8 weeks.<br>
+                        In the meantime, consider reviewing our <span class="font-medium">Gooning 101</span> preparatory materials.
+                    </div>
+                    
+                    <button onclick="hideApplicationModal()" 
+                            class="mt-8 px-8 py-2.5 text-sm font-semibold border border-slate-300 hover:bg-slate-50 rounded-xl transition-colors">
+                        Return to Homepage
+                    </button>
+                </div>
+            `;
+        }
+
+        // Keyboard escape for modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('application-modal');
+                if (!modal.classList.contains('hidden')) {
+                    hideApplicationModal();
+                }
+            }
+        });
+
+        // Initialize
+        initializeTailwind();
+        
+        // Optional: subtle stat counter animation on scroll (lightweight)
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
+                if (!target) return;
+                
+                let current = 0;
+                const increment = Math.ceil(target / 60);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = stat.textContent; // keep original formatting
+                        clearInterval(timer);
+                    } else {
+                        if (stat.textContent.includes('%')) {
+                            stat.textContent = current + '%';
+                        } else if (stat.textContent.includes(',')) {
+                            stat.textContent = current.toLocaleString();
+                        } else {
+                            stat.textContent = current;
+                        }
+                    }
+                }, 25);
+            });
+        }
+        
+        // Trigger stat animation when stats section enters view
+        const statsSection = document.querySelector('.border-b.border-slate-200.bg-white');
+        if (statsSection) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.6 });
+            observer.observe(statsSection);
+        }
+    </script>
+</body>
+</html>
