@@ -1,0 +1,150 @@
+// POST /api/apply — Cloudflare Pages Function.
+//
+// This is the only place the Discord webhook URL lives. It is read from the
+// `DISCORD_WEBHOOK_URL` environment secret (set in the Cloudflare dashboard, or
+// in .dev.vars for local `wrangler pages dev`). The browser never sees it — the
+// client just POSTs the application JSON here.
+
+const DISCORD_LIMIT = 2000; // Discord message content hard cap
+const MAX = {
+    full_name: 200,
+    email: 320,
+    intended_program: 100,
+    certification_type: 100,
+    personal_statement: 8000,
+};
+
+// Best-effort in-memory rate limit. Pages Functions run on ephemeral isolates,
+// so this only catches bursts hitting the same isolate — good enough to blunt
+// casual spam. For hard guarantees, back this with Cloudflare KV or a Durable
+// Object.
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const hits = new Map(); // ip -> number[] (timestamps)
+
+function rateLimited(ip) {
+    const now = Date.now();
+    const recent = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+    recent.push(now);
+    hits.set(ip, recent);
+    return recent.length > RATE_MAX;
+}
+
+function json(body, status = 200) {
+    return new Response(JSON.stringify(body), {
+        status,
+        headers: {
+            'content-type': 'application/json; charset=utf-8',
+            'cache-control': 'no-store',
+        },
+    });
+}
+
+const isValidEmail = (v) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
+
+function chunkMessages(header, statement) {
+    const full = header + '\n' + statement;
+    if (full.length <= DISCORD_LIMIT) return [full];
+
+    const messages = [];
+    const firstSize = DISCORD_LIMIT - header.length - 30;
+    let first = header + '\n' + statement.slice(0, firstSize);
+    if (statement.length > firstSize) first += '\n… (continued below)';
+    messages.push(first);
+
+    let remaining = statement.slice(firstSize);
+    let part = 2;
+    while (remaining.length > 0) {
+        const size = DISCORD_LIMIT - 60;
+        let chunk = `**Personal Statement (continued — part ${part})**\n` + remaining.slice(0, size);
+        if (remaining.length > size) chunk += '\n…';
+        messages.push(chunk);
+        remaining = remaining.slice(size);
+        part++;
+    }
+    return messages;
+}
+
+// Single catch-all so this function owns the whole /api/apply route — otherwise
+// non-POST methods fall through to the static asset handler and return the
+// homepage instead of a clean 405.
+export async function onRequest({ request, env }) {
+    if (request.method !== 'POST') {
+        return json({ ok: false, error: 'Method not allowed.' }, 405);
+    }
+
+    const webhook = env.DISCORD_WEBHOOK_URL;
+    if (!webhook) {
+        return json({ ok: false, error: 'Server is not configured to accept applications yet.' }, 500);
+    }
+
+    const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+    if (rateLimited(ip)) {
+        return json({ ok: false, error: 'Too many submissions. Please wait a minute and try again.' }, 429);
+    }
+
+    let data;
+    try {
+        data = await request.json();
+    } catch {
+        return json({ ok: false, error: 'Invalid request.' }, 400);
+    }
+
+    // Honeypot: real users never fill `company`. Bots that do get a fake success
+    // and nothing is forwarded.
+    if (typeof data.company === 'string' && data.company.trim() !== '') {
+        return json({ ok: true });
+    }
+
+    const fields = {
+        full_name: String(data.full_name ?? '').trim(),
+        email: String(data.email ?? '').trim(),
+        intended_program: String(data.intended_program ?? '').trim(),
+        certification_type: String(data.certification_type ?? '').trim(),
+        personal_statement: String(data.personal_statement ?? '').trim(),
+    };
+
+    const errors = [];
+    if (!fields.full_name) errors.push('Full name is required.');
+    if (!isValidEmail(fields.email)) errors.push('A valid email address is required.');
+    if (!fields.intended_program) errors.push('Intended program is required.');
+    if (!fields.certification_type) errors.push('Certification type is required.');
+    if (!fields.personal_statement) errors.push('Personal statement is required.');
+    for (const [key, limit] of Object.entries(MAX)) {
+        if (fields[key].length > limit) errors.push(`${key.replace(/_/g, ' ')} is too long.`);
+    }
+    if (errors.length) {
+        return json({ ok: false, error: errors.join(' ') }, 400);
+    }
+
+    const header =
+        `**New Application – Chud University of Michigan**\n\n` +
+        `**Name:** ${fields.full_name}\n` +
+        `**Email:** ${fields.email}\n` +
+        `**Intended Program:** ${fields.intended_program}\n` +
+        `**Certification:** ${fields.certification_type}\n\n` +
+        `**Personal Statement:**`;
+
+    const messages = chunkMessages(header, fields.personal_statement);
+
+    try {
+        for (const content of messages) {
+            const res = await fetch(webhook, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ content, allowed_mentions: { parse: [] } }),
+            });
+            if (!res.ok) {
+                throw new Error(`Discord responded ${res.status}`);
+            }
+            if (messages.length > 1) {
+                // Stay clear of Discord's webhook rate limit when chunking.
+                await new Promise((r) => setTimeout(r, 420));
+            }
+        }
+    } catch (err) {
+        return json({ ok: false, error: 'Could not deliver your application. Please try again shortly.' }, 502);
+    }
+
+    return json({ ok: true });
+}
